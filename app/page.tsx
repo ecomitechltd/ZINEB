@@ -31,6 +31,60 @@ const popularDestinations = [
   { code: 'DE', name: 'Germany', from: 1.80 },
 ]
 
+// Animation variants for staggered word reveal
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.3,
+    },
+  },
+}
+
+const wordVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: 'blur(10px)',
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  },
+}
+
+// Word by word text component
+function AnimatedText({ text, className, gradient = false }: { text: string; className?: string; gradient?: boolean }) {
+  const words = text.split(' ')
+
+  return (
+    <motion.span
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className={className}
+    >
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          variants={wordVariants}
+          className={`inline-block ${gradient ? 'text-gradient' : ''}`}
+          style={{ marginRight: '0.3em' }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </motion.span>
+  )
+}
+
 export default function HomePage() {
   return (
     <>
@@ -51,92 +105,223 @@ export default function HomePage() {
           <div className="container mx-auto px-6 py-20 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Left content */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7 }}
-              >
+              <div>
+                {/* Badge */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 }}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-indigo-100 text-indigo-600 text-sm font-bold uppercase tracking-wide mb-8 shadow-sm"
                 >
-                  <GlobeHemisphereWest weight="fill" className="w-4 h-4" />
-                  190+ Countries Covered
+                  <motion.span
+                    initial={{ rotate: -180, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                  >
+                    <GlobeHemisphereWest weight="fill" className="w-4 h-4" />
+                  </motion.span>
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                  >
+                    190+ Countries Covered
+                  </motion.span>
                 </motion.div>
 
+                {/* Headline with word-by-word reveal */}
                 <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.05] mb-8">
-                  Travel the world,{' '}
-                  <span className="text-gradient">stay connected</span>
+                  <AnimatedText text="Travel the world," />
+                  <br />
+                  <motion.span
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="text-gradient"
+                    style={{ transitionDelay: '0.5s' }}
+                  >
+                    {['stay', 'connected'].map((word, i) => (
+                      <motion.span
+                        key={i}
+                        variants={wordVariants}
+                        className="inline-block text-gradient"
+                        style={{ marginRight: '0.3em' }}
+                        transition={{ delay: 0.6 + i * 0.1 }}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </motion.span>
                 </h1>
 
-                <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl">
+                {/* Subtitle with smooth fade */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl"
+                >
                   Get instant mobile data anywhere. No SIM swaps, no roaming fees.
                   Just scan and connect in seconds.
-                </p>
+                </motion.p>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-14">
-                  <Link href="/destinations" className="btn btn-primary text-base px-8 py-4 group">
-                    Browse Plans
-                    <ArrowRight weight="bold" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                  <Link href="/how-it-works" className="btn btn-secondary text-base px-8 py-4">
-                    How It Works
-                  </Link>
-                </div>
+                {/* CTA Buttons with staggered entry */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.1 }}
+                  className="flex flex-col sm:flex-row gap-4 mb-14"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Link href="/destinations" className="btn btn-primary text-base px-8 py-4 group">
+                      Browse Plans
+                      <ArrowRight weight="bold" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 1.3 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Link href="/how-it-works" className="btn btn-secondary text-base px-8 py-4">
+                      How It Works
+                    </Link>
+                  </motion.div>
+                </motion.div>
 
-                {/* Trust indicators */}
-                <div className="flex flex-wrap items-center gap-8">
-                  <div className="flex items-center gap-1">
+                {/* Trust indicators with fade in */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.4 }}
+                  className="flex flex-wrap items-center gap-8"
+                >
+                  <motion.div
+                    className="flex items-center gap-1"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: {
+                        opacity: 1,
+                        transition: { staggerChildren: 0.1, delayChildren: 1.5 },
+                      },
+                    }}
+                  >
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} weight="fill" className="w-5 h-5 text-yellow-400" />
+                      <motion.span
+                        key={i}
+                        variants={{
+                          hidden: { opacity: 0, scale: 0, rotate: -180 },
+                          visible: { opacity: 1, scale: 1, rotate: 0 },
+                        }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      >
+                        <Star weight="fill" className="w-5 h-5 text-yellow-400" />
+                      </motion.span>
                     ))}
-                    <span className="ml-2 text-gray-700 font-bold">4.9/5</span>
-                  </div>
-                  <div className="h-8 w-px bg-gray-200" />
-                  <div className="text-gray-600">
+                    <motion.span
+                      initial={{ opacity: 0, x: -5 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 2 }}
+                      className="ml-2 text-gray-700 font-bold"
+                    >
+                      4.9/5
+                    </motion.span>
+                  </motion.div>
+                  <motion.div
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{ delay: 2.1, duration: 0.3 }}
+                    className="h-8 w-px bg-gray-200 origin-center"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 2.2 }}
+                    className="text-gray-600"
+                  >
                     <span className="font-extrabold text-gray-900">50,000+</span> Happy Travelers
-                  </div>
-                </div>
-              </motion.div>
+                  </motion.div>
+                </motion.div>
+              </div>
 
               {/* Right - Phone mockup */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
+                initial={{ opacity: 0, scale: 0.8, y: 40 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.5,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
                 className="relative hidden lg:flex justify-center"
               >
-                <div className="relative">
+                <motion.div
+                  className="relative"
+                  initial={{ rotateY: -15, rotateX: 5 }}
+                  animate={{ rotateY: 0, rotateX: 0 }}
+                  transition={{ duration: 1.2, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  style={{ perspective: 1000 }}
+                >
                   {/* Phone */}
                   <div className="relative w-72 h-[580px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl shadow-indigo-500/20">
                     <div className="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-6 bg-gray-900 rounded-full z-20" />
                     <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-indigo-600 rounded-[2.5rem] p-6 text-white overflow-hidden relative">
                       {/* Status bar */}
-                      <div className="flex justify-between items-center text-xs mb-8 pt-4">
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.2, duration: 0.5 }}
+                        className="flex justify-between items-center text-xs mb-8 pt-4"
+                      >
                         <span className="font-semibold">9:41</span>
                         <div className="flex items-center gap-1">
                           <CellSignalFull weight="fill" className="w-4 h-4" />
                           <WifiHigh weight="fill" className="w-4 h-4" />
                           <BatteryFull weight="fill" className="w-5 h-5" />
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Content */}
-                      <div className="text-center">
-                        <div className="mb-4 flex justify-center">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.4, duration: 0.6 }}
+                        className="text-center"
+                      >
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 1.5, duration: 0.5 }}
+                          className="mb-4 flex justify-center"
+                        >
                           <FlagIcon code="JP" className="w-16 h-11 rounded-lg shadow-lg" />
-                        </div>
+                        </motion.div>
                         <h3 className="text-2xl font-extrabold uppercase tracking-wide">Japan eSIM</h3>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm mt-2">
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 1.7, type: 'spring', stiffness: 300 }}
+                          className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm mt-2"
+                        >
                           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                           Active
-                        </div>
-                      </div>
+                        </motion.div>
+                      </motion.div>
 
                       <div className="mt-10 space-y-4">
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-5">
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 1.8, duration: 0.5 }}
+                          className="bg-white/15 backdrop-blur-sm rounded-2xl p-5"
+                        >
                           <div className="flex justify-between text-sm mb-3">
                             <span className="font-semibold uppercase tracking-wide text-white/80">Data Used</span>
                             <span className="font-bold">2.4 GB / 5 GB</span>
@@ -145,18 +330,30 @@ export default function HomePage() {
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: '48%' }}
-                              transition={{ duration: 1.5, delay: 0.8 }}
+                              transition={{ duration: 1.5, delay: 2.2 }}
                               className="h-full bg-white rounded-full"
                             />
                           </div>
-                        </div>
+                        </motion.div>
 
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-5">
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 2, duration: 0.5 }}
+                          className="bg-white/15 backdrop-blur-sm rounded-2xl p-5"
+                        >
                           <div className="flex justify-between items-center">
                             <span className="font-semibold uppercase tracking-wide text-white/80 text-sm">Days Left</span>
-                            <span className="text-3xl font-extrabold">18</span>
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 2.3, type: 'spring', stiffness: 200 }}
+                              className="text-3xl font-extrabold"
+                            >
+                              18
+                            </motion.span>
                           </div>
-                        </div>
+                        </motion.div>
                       </div>
 
                       {/* Decorative */}
@@ -164,10 +361,21 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Floating cards */}
+                  {/* Floating cards - with entrance + float animation */}
                   <motion.div
-                    animate={{ y: [0, -12, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    initial={{ opacity: 0, x: -50, scale: 0.8 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      y: [0, -12, 0],
+                    }}
+                    transition={{
+                      opacity: { delay: 1.8, duration: 0.6 },
+                      x: { delay: 1.8, duration: 0.6 },
+                      scale: { delay: 1.8, duration: 0.6 },
+                      y: { delay: 2.4, duration: 4, repeat: Infinity, ease: 'easeInOut' },
+                    }}
                     className="absolute -top-4 -left-20 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
                     <FlagIcon code="FR" className="w-12 h-8" />
@@ -178,8 +386,19 @@ export default function HomePage() {
                   </motion.div>
 
                   <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                    initial={{ opacity: 0, x: 50, scale: 0.8 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      y: [0, 10, 0],
+                    }}
+                    transition={{
+                      opacity: { delay: 2, duration: 0.6 },
+                      x: { delay: 2, duration: 0.6 },
+                      scale: { delay: 2, duration: 0.6 },
+                      y: { delay: 2.6, duration: 5, repeat: Infinity, ease: 'easeInOut' },
+                    }}
                     className="absolute top-24 -right-24 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
                     <FlagIcon code="US" className="w-12 h-8" />
@@ -190,8 +409,19 @@ export default function HomePage() {
                   </motion.div>
 
                   <motion.div
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                    initial={{ opacity: 0, x: -40, scale: 0.8 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      y: [0, -8, 0],
+                    }}
+                    transition={{
+                      opacity: { delay: 2.2, duration: 0.6 },
+                      x: { delay: 2.2, duration: 0.6 },
+                      scale: { delay: 2.2, duration: 0.6 },
+                      y: { delay: 2.8, duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
+                    }}
                     className="absolute bottom-32 -left-16 glass rounded-2xl p-4 shadow-xl"
                   >
                     <div className="flex items-center gap-2 text-green-600">
@@ -203,8 +433,19 @@ export default function HomePage() {
                   </motion.div>
 
                   <motion.div
-                    animate={{ y: [0, 14, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                    initial={{ opacity: 0, x: 40, scale: 0.8 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      y: [0, 14, 0],
+                    }}
+                    transition={{
+                      opacity: { delay: 2.4, duration: 0.6 },
+                      x: { delay: 2.4, duration: 0.6 },
+                      scale: { delay: 2.4, duration: 0.6 },
+                      y: { delay: 3, duration: 4.5, repeat: Infinity, ease: 'easeInOut' },
+                    }}
                     className="absolute bottom-16 -right-16 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
                     <FlagIcon code="TH" className="w-12 h-8" />
@@ -213,7 +454,7 @@ export default function HomePage() {
                       <p className="text-sm text-gray-500 font-medium">From $1.20</p>
                     </div>
                   </motion.div>
-                </div>
+                </motion.div>
               </motion.div>
             </div>
           </div>
