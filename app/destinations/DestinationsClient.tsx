@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
 import { Footer } from '@/components/shared/Footer'
-import { Search, MapPin, Globe2, Plane, TrendingUp, X } from 'lucide-react'
+import { FlagIcon } from '@/components/shared/FlagIcon'
+import { MagnifyingGlass, MapPin, GlobeHemisphereWest, AirplaneTilt, TrendUp, X } from '@phosphor-icons/react'
 
 interface Destination {
   code: string
@@ -22,13 +23,13 @@ interface DestinationsClientProps {
 }
 
 const regions = [
-  { id: 'popular', label: 'Popular', icon: TrendingUp },
-  { id: 'Europe', label: 'Europe', icon: Globe2 },
-  { id: 'Asia', label: 'Asia', icon: Plane },
+  { id: 'popular', label: 'Popular', icon: TrendUp },
+  { id: 'Europe', label: 'Europe', icon: GlobeHemisphereWest },
+  { id: 'Asia', label: 'Asia', icon: AirplaneTilt },
   { id: 'Americas', label: 'Americas', icon: MapPin },
-  { id: 'Oceania', label: 'Oceania', icon: Globe2 },
+  { id: 'Oceania', label: 'Oceania', icon: GlobeHemisphereWest },
   { id: 'Middle East', label: 'Middle East', icon: MapPin },
-  { id: 'Africa', label: 'Africa', icon: Globe2 },
+  { id: 'Africa', label: 'Africa', icon: GlobeHemisphereWest },
 ]
 
 export function DestinationsClient({ destinations, popularCountries }: DestinationsClientProps) {
@@ -96,7 +97,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
               {/* Search Bar */}
               <div className="max-w-xl mx-auto relative">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <MagnifyingGlass weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search countries..."
@@ -115,7 +116,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                       }}
                       className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
                     >
-                      <X className="w-5 h-5 text-gray-400" />
+                      <X weight="bold" className="w-5 h-5 text-gray-400" />
                     </button>
                   )}
                 </div>
@@ -142,7 +143,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  <region.icon className="w-4 h-4" />
+                  <region.icon weight="bold" className="w-4 h-4" />
                   {region.label}
                 </button>
               ))}
@@ -184,9 +185,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                       className="group block bg-white rounded-2xl p-5 border border-gray-100 hover:border-indigo-200 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <span className="text-5xl group-hover:scale-110 transition-transform duration-300">
-                          {dest.flag}
-                        </span>
+                        <FlagIcon code={dest.code} className="w-14 h-10 group-hover:scale-110 transition-transform duration-300" />
                         <span className="badge badge-primary">
                           From ${dest.lowestPrice.toFixed(2)}
                         </span>
@@ -210,7 +209,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                 className="text-center py-16"
               >
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-gray-400" />
+                  <MagnifyingGlass weight="bold" className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   No destinations found
@@ -234,8 +233,8 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                 viewport={{ once: true }}
                 className="relative overflow-hidden rounded-3xl p-8 bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
               >
-                <div className="absolute -right-8 -bottom-8 text-[150px] opacity-10">
-                  🇪🇺
+                <div className="absolute -right-4 -bottom-4 opacity-10">
+                  <GlobeHemisphereWest weight="fill" className="w-40 h-40" />
                 </div>
                 <div className="relative z-10">
                   <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium mb-4">
@@ -265,8 +264,8 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                 viewport={{ once: true }}
                 className="relative overflow-hidden rounded-3xl p-8 bg-gradient-to-br from-orange-500 to-rose-500 text-white"
               >
-                <div className="absolute -right-8 -bottom-8 text-[150px] opacity-10">
-                  🌏
+                <div className="absolute -right-4 -bottom-4 opacity-10">
+                  <AirplaneTilt weight="fill" className="w-40 h-40" />
                 </div>
                 <div className="relative z-10">
                   <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium mb-4">

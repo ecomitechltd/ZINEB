@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Plane, User, LogOut, ChevronDown, Sparkles } from 'lucide-react'
+import { AirplaneTilt, List, X, User, SignOut, CaretDown, ArrowRight } from '@phosphor-icons/react'
 
 export function Navbar() {
   const { data: session } = useSession()
@@ -32,7 +32,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-all duration-300 group-hover:scale-105">
-                <Plane className="w-5 h-5 text-white" />
+                <AirplaneTilt weight="fill" className="w-5 h-5 text-white" />
               </div>
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse" />
             </div>
@@ -70,7 +70,7 @@ export function Navbar() {
                     {session.user?.name?.[0] || session.user?.email?.[0]?.toUpperCase()}
                   </div>
                   <span className="font-semibold">{session.user?.name?.split(' ')[0]}</span>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
+                  <CaretDown weight="bold" className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
@@ -87,7 +87,7 @@ export function Navbar() {
                         className="flex items-center gap-3 px-4 py-3 hover:bg-indigo-50 text-gray-700 font-medium transition-colors"
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        <User className="w-4 h-4" />
+                        <User weight="bold" className="w-4 h-4" />
                         Dashboard
                       </Link>
                       <div className="h-px bg-gray-100 mx-3 my-1" />
@@ -95,7 +95,7 @@ export function Navbar() {
                         onClick={() => signOut()}
                         className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 text-gray-700 hover:text-red-600 w-full font-medium transition-colors"
                       >
-                        <LogOut className="w-4 h-4" />
+                        <SignOut weight="bold" className="w-4 h-4" />
                         Sign Out
                       </button>
                     </motion.div>
@@ -108,8 +108,8 @@ export function Navbar() {
                   Sign In
                 </Link>
                 <Link href="/register" className="btn btn-primary group">
-                  <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   Get Started
+                  <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </>
             )}
@@ -120,7 +120,7 @@ export function Navbar() {
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileOpen ? <X weight="bold" className="w-6 h-6" /> : <List weight="bold" className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -180,8 +180,8 @@ export function Navbar() {
                       className="btn btn-primary w-full justify-center"
                       onClick={() => setMobileOpen(false)}
                     >
-                      <Sparkles className="w-4 h-4" />
                       Get Started
+                      <ArrowRight weight="bold" className="w-4 h-4" />
                     </Link>
                   </>
                 )}

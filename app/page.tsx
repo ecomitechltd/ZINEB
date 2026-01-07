@@ -4,29 +4,31 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
 import { Footer } from '@/components/shared/Footer'
+import { FlagIcon } from '@/components/shared/FlagIcon'
 import {
-  Globe,
-  Zap,
-  Shield,
-  Smartphone,
+  GlobeHemisphereWest,
+  Lightning,
+  ShieldCheck,
+  DeviceMobile,
   ArrowRight,
-  Check,
+  CheckCircle,
   Star,
-  Wifi,
+  WifiHigh,
   Clock,
   CreditCard,
-  Sparkles,
-  ChevronRight,
-} from 'lucide-react'
+  CaretRight,
+  CellSignalFull,
+  BatteryFull,
+} from '@phosphor-icons/react'
 
 // Popular destinations data
 const popularDestinations = [
-  { code: 'JP', name: 'Japan', flag: '🇯🇵', from: 1.80 },
-  { code: 'US', name: 'USA', flag: '🇺🇸', from: 2.50 },
-  { code: 'TH', name: 'Thailand', flag: '🇹🇭', from: 1.20 },
-  { code: 'GB', name: 'UK', flag: '🇬🇧', from: 2.10 },
-  { code: 'FR', name: 'France', flag: '🇫🇷', from: 1.90 },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪', from: 1.80 },
+  { code: 'JP', name: 'Japan', from: 1.80 },
+  { code: 'US', name: 'USA', from: 2.50 },
+  { code: 'TH', name: 'Thailand', from: 1.20 },
+  { code: 'GB', name: 'UK', from: 2.10 },
+  { code: 'FR', name: 'France', from: 1.90 },
+  { code: 'DE', name: 'Germany', from: 1.80 },
 ]
 
 export default function HomePage() {
@@ -60,7 +62,7 @@ export default function HomePage() {
                   transition={{ delay: 0.2 }}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-indigo-100 text-indigo-600 text-sm font-bold uppercase tracking-wide mb-8 shadow-sm"
                 >
-                  <Globe className="w-4 h-4" />
+                  <GlobeHemisphereWest weight="fill" className="w-4 h-4" />
                   190+ Countries Covered
                 </motion.div>
 
@@ -77,7 +79,7 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4 mb-14">
                   <Link href="/destinations" className="btn btn-primary text-base px-8 py-4 group">
                     Browse Plans
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight weight="bold" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link href="/how-it-works" className="btn btn-secondary text-base px-8 py-4">
                     How It Works
@@ -88,7 +90,7 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-8">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} weight="fill" className="w-5 h-5 text-yellow-400" />
                     ))}
                     <span className="ml-2 text-gray-700 font-bold">4.9/5</span>
                   </div>
@@ -115,15 +117,17 @@ export default function HomePage() {
                       <div className="flex justify-between items-center text-xs mb-8 pt-4">
                         <span className="font-semibold">9:41</span>
                         <div className="flex items-center gap-1">
-                          <Signal className="w-4 h-4" />
-                          <Wifi className="w-4 h-4" />
-                          <Battery className="w-5 h-5" />
+                          <CellSignalFull weight="fill" className="w-4 h-4" />
+                          <WifiHigh weight="fill" className="w-4 h-4" />
+                          <BatteryFull weight="fill" className="w-5 h-5" />
                         </div>
                       </div>
 
                       {/* Content */}
                       <div className="text-center">
-                        <div className="text-6xl mb-4">🇯🇵</div>
+                        <div className="mb-4 flex justify-center">
+                          <FlagIcon code="JP" className="w-16 h-11 rounded-lg shadow-lg" />
+                        </div>
                         <h3 className="text-2xl font-extrabold uppercase tracking-wide">Japan eSIM</h3>
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm mt-2">
                           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
@@ -166,7 +170,7 @@ export default function HomePage() {
                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                     className="absolute -top-4 -left-20 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
-                    <span className="text-4xl">🇫🇷</span>
+                    <FlagIcon code="FR" className="w-12 h-8" />
                     <div>
                       <p className="font-bold text-gray-900">France</p>
                       <p className="text-sm text-gray-500 font-medium">From $1.90</p>
@@ -178,7 +182,7 @@ export default function HomePage() {
                     transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                     className="absolute top-24 -right-24 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
-                    <span className="text-4xl">🇺🇸</span>
+                    <FlagIcon code="US" className="w-12 h-8" />
                     <div>
                       <p className="font-bold text-gray-900">USA</p>
                       <p className="text-sm text-gray-500 font-medium">From $2.50</p>
@@ -192,7 +196,7 @@ export default function HomePage() {
                   >
                     <div className="flex items-center gap-2 text-green-600">
                       <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                        <Check className="w-5 h-5" />
+                        <CheckCircle weight="fill" className="w-5 h-5" />
                       </div>
                       <span className="font-bold">Connected!</span>
                     </div>
@@ -203,7 +207,7 @@ export default function HomePage() {
                     transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
                     className="absolute bottom-16 -right-16 glass rounded-2xl p-4 flex items-center gap-3 shadow-xl"
                   >
-                    <span className="text-4xl">🇹🇭</span>
+                    <FlagIcon code="TH" className="w-12 h-8" />
                     <div>
                       <p className="font-bold text-gray-900">Thailand</p>
                       <p className="text-sm text-gray-500 font-medium">From $1.20</p>
@@ -237,7 +241,7 @@ export default function HomePage() {
                 className="btn btn-secondary self-start md:self-auto group"
               >
                 View All
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <CaretRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </motion.div>
 
@@ -256,7 +260,7 @@ export default function HomePage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <span className="text-5xl group-hover:scale-110 transition-transform duration-300">{dest.flag}</span>
+                        <FlagIcon code={dest.code} className="w-14 h-10 group-hover:scale-110 transition-transform duration-300" />
                         <div>
                           <h3 className="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors">
                             {dest.name}
@@ -265,7 +269,7 @@ export default function HomePage() {
                         </div>
                       </div>
                       <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center transition-colors">
-                        <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+                        <ArrowRight weight="bold" className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
                       </div>
                     </div>
                   </Link>
@@ -298,7 +302,7 @@ export default function HomePage() {
               {[
                 {
                   step: '01',
-                  icon: Smartphone,
+                  icon: DeviceMobile,
                   title: 'Choose Your Plan',
                   description: 'Pick your destination and data package. Plans start from just $0.30.',
                   color: 'primary',
@@ -312,7 +316,7 @@ export default function HomePage() {
                 },
                 {
                   step: '03',
-                  icon: Wifi,
+                  icon: WifiHigh,
                   title: 'Scan & Connect',
                   description: "Scan the QR code, install eSIM, and you're online in seconds.",
                   color: 'accent',
@@ -333,7 +337,7 @@ export default function HomePage() {
                   </div>
 
                   <div className={`feature-icon feature-icon-${item.color} w-14 h-14 mb-6 mt-4 group-hover:scale-110 transition-transform`}>
-                    <item.icon className="w-7 h-7" />
+                    <item.icon weight="duotone" className="w-7 h-7" />
                   </div>
                   <h3 className="text-xl font-bold mb-3">{item.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{item.description}</p>
@@ -369,7 +373,7 @@ export default function HomePage() {
                 className="lg:col-span-2 bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-50 rounded-3xl p-10 border border-indigo-100 hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300"
               >
                 <div className="feature-icon feature-icon-primary w-16 h-16 mb-6">
-                  <Zap className="w-8 h-8" />
+                  <Lightning weight="duotone" className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-extrabold mb-4">Instant Activation</h3>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
@@ -387,7 +391,7 @@ export default function HomePage() {
                 className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8 border border-orange-100 hover:shadow-xl hover:shadow-orange-100/50 transition-all duration-300"
               >
                 <div className="feature-icon feature-icon-secondary w-14 h-14 mb-5">
-                  <Globe className="w-7 h-7" />
+                  <GlobeHemisphereWest weight="duotone" className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-extrabold mb-3">190+ Countries</h3>
                 <p className="text-gray-600">
@@ -403,7 +407,7 @@ export default function HomePage() {
                 className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-8 border border-emerald-100 hover:shadow-xl hover:shadow-emerald-100/50 transition-all duration-300"
               >
                 <div className="feature-icon feature-icon-accent w-14 h-14 mb-5">
-                  <Shield className="w-7 h-7" />
+                  <ShieldCheck weight="duotone" className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-extrabold mb-3">Secure & Private</h3>
                 <p className="text-gray-600">
@@ -419,7 +423,7 @@ export default function HomePage() {
                 className="bg-white rounded-3xl p-8 border border-gray-100 hover:shadow-xl transition-all duration-300"
               >
                 <div className="feature-icon feature-icon-primary w-14 h-14 mb-5">
-                  <Clock className="w-7 h-7" />
+                  <Clock weight="duotone" className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-extrabold mb-3">24/7 Support</h3>
                 <p className="text-gray-600">
@@ -453,9 +457,8 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/destinations" className="btn bg-white text-indigo-600 hover:bg-gray-100 text-base px-8 py-4 shadow-xl group">
-                  <Sparkles className="w-5 h-5" />
                   Get Started
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight weight="bold" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link href="/pricing" className="btn border-2 border-white/30 text-white hover:bg-white/10 text-base px-8 py-4">
                   View Pricing
@@ -468,22 +471,5 @@ export default function HomePage() {
 
       <Footer />
     </>
-  )
-}
-
-// Icons for phone mockup
-function Signal({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M2 20h2v-8H2v8zm4 0h2v-6H6v6zm4 0h2v-4h-2v4zm4 0h2V8h-2v12zm4 0h2V4h-2v16z" />
-    </svg>
-  )
-}
-
-function Battery({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17 4h-3V2h-4v2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 18H7V6h10v16z" />
-    </svg>
   )
 }

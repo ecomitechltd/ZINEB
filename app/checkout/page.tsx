@@ -5,22 +5,24 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
+import { FlagIcon } from '@/components/shared/FlagIcon'
 import {
   ArrowLeft,
   CreditCard,
-  Mail,
+  Envelope,
   Lock,
   Check,
-  Shield,
-  Zap,
-  ChevronRight,
-  Loader2,
-} from 'lucide-react'
+  ShieldCheck,
+  Lightning,
+  CaretRight,
+  CircleNotch,
+} from '@phosphor-icons/react'
 
 interface PlanData {
   packageCode: string
   slug: string
   country: string
+  countryCode: string
   flag: string
   data: string
   days: number
@@ -183,7 +185,7 @@ function CheckoutContent() {
         <Navbar />
         <div className="pt-16 min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mx-auto mb-4" />
+            <CircleNotch weight="bold" className="w-8 h-8 animate-spin text-indigo-600 mx-auto mb-4" />
             <p className="text-gray-500">Loading plan details...</p>
           </div>
         </div>
@@ -224,7 +226,7 @@ function CheckoutContent() {
               href={`/destinations/${countryCode.toLowerCase()}`}
               className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft weight="bold" className="w-4 h-4" />
               Back
             </Link>
           </div>
@@ -245,7 +247,7 @@ function CheckoutContent() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                       step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100'
                     }`}>
-                      {step > 1 ? <Check className="w-4 h-4" /> : '1'}
+                      {step > 1 ? <Check weight="bold" className="w-4 h-4" /> : '1'}
                     </div>
                     <span className="font-medium hidden sm:inline">Email</span>
                   </div>
@@ -256,7 +258,7 @@ function CheckoutContent() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                       step >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-100'
                     }`}>
-                      {step > 2 ? <Check className="w-4 h-4" /> : '2'}
+                      {step > 2 ? <Check weight="bold" className="w-4 h-4" /> : '2'}
                     </div>
                     <span className="font-medium hidden sm:inline">Payment</span>
                   </div>
@@ -282,7 +284,7 @@ function CheckoutContent() {
                       </p>
 
                       <div className="relative mb-6">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Envelope weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="email"
                           placeholder="your@email.com"
@@ -300,7 +302,7 @@ function CheckoutContent() {
                         className="btn btn-primary w-full"
                       >
                         Continue to Payment
-                        <ChevronRight className="w-4 h-4" />
+                        <CaretRight weight="bold" className="w-4 h-4" />
                       </button>
                     </motion.div>
                   )}
@@ -337,7 +339,7 @@ function CheckoutContent() {
                             Card number
                           </label>
                           <div className="relative">
-                            <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <CreditCard weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             <input
                               type="text"
                               placeholder="1234 5678 9012 3456"
@@ -370,7 +372,7 @@ function CheckoutContent() {
                               CVC
                             </label>
                             <div className="relative">
-                              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                              <Lock weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                               <input
                                 type="text"
                                 placeholder="123"
@@ -400,13 +402,13 @@ function CheckoutContent() {
                         >
                           {isProcessing ? (
                             <>
-                              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <CircleNotch weight="bold" className="w-5 h-5 animate-spin" />
                               Processing...
                             </>
                           ) : (
                             <>
                               Pay ${total.toFixed(2)}
-                              <Lock className="w-4 h-4" />
+                              <Lock weight="bold" className="w-4 h-4" />
                             </>
                           )}
                         </button>
@@ -419,11 +421,11 @@ function CheckoutContent() {
                 <div className="mt-8 pt-6 border-t border-gray-100">
                   <div className="flex items-center justify-center gap-6 text-gray-400">
                     <div className="flex items-center gap-2 text-sm">
-                      <Lock className="w-4 h-4" />
+                      <Lock weight="bold" className="w-4 h-4" />
                       <span>SSL Encrypted</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Shield className="w-4 h-4" />
+                      <ShieldCheck weight="bold" className="w-4 h-4" />
                       <span>Secure Checkout</span>
                     </div>
                   </div>
@@ -443,11 +445,11 @@ function CheckoutContent() {
 
                 {/* Plan Details */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl mb-4">
-                  <span className="text-4xl">{plan.flag}</span>
+                  <FlagIcon code={plan.countryCode || countryCode} className="w-14 h-10" />
                   <div className="flex-1">
                     <h4 className="font-semibold text-gray-900">{plan.country} eSIM</h4>
                     <p className="text-gray-500 text-sm">
-                      {plan.data} • {plan.days} days
+                      {plan.data} - {plan.days} days
                     </p>
                     <p className="text-gray-400 text-xs mt-1">
                       {plan.speed}
@@ -518,11 +520,11 @@ function CheckoutContent() {
                 {/* Features */}
                 <div className="space-y-3 pt-4 border-t border-gray-100">
                   {[
-                    { icon: Zap, text: 'Instant delivery to your email' },
-                    { icon: Shield, text: '30-day money-back guarantee' },
+                    { icon: Lightning, text: 'Instant delivery to your email' },
+                    { icon: ShieldCheck, text: '30-day money-back guarantee' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 text-gray-600 text-sm">
-                      <item.icon className="w-4 h-4 text-indigo-600" />
+                      <item.icon weight="duotone" className="w-4 h-4 text-indigo-600" />
                       <span>{item.text}</span>
                     </div>
                   ))}
@@ -540,7 +542,7 @@ export default function CheckoutPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+        <CircleNotch weight="bold" className="w-8 h-8 text-indigo-600 animate-spin" />
       </div>
     }>
       <CheckoutContent />

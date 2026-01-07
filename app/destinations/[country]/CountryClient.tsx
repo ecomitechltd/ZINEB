@@ -6,15 +6,16 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
 import { Footer } from '@/components/shared/Footer'
+import { FlagIcon } from '@/components/shared/FlagIcon'
 import {
   ArrowLeft,
-  Wifi,
+  WifiHigh,
   Clock,
-  Signal,
-  Smartphone,
-  Shield,
-  ChevronRight,
-} from 'lucide-react'
+  CellSignalFull,
+  DeviceMobile,
+  ShieldCheck,
+  CaretRight,
+} from '@phosphor-icons/react'
 
 interface Plan {
   id: string
@@ -72,10 +73,8 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700" />
-          <div className="absolute inset-0 opacity-20">
-            <div className="text-[400px] leading-none text-white/30 -translate-y-1/4 translate-x-1/4">
-              {country.flag}
-            </div>
+          <div className="absolute inset-0 opacity-10 flex items-center justify-end pr-20">
+            <FlagIcon code={country.code} className="w-96 h-64" />
           </div>
 
           <div className="container mx-auto px-6 py-12 relative z-10">
@@ -83,7 +82,7 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
               href="/destinations"
               className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-6"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft weight="bold" className="w-4 h-4" />
               Back to destinations
             </Link>
 
@@ -92,13 +91,13 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-6"
             >
-              <span className="text-8xl drop-shadow-lg">{country.flag}</span>
+              <FlagIcon code={country.code} className="w-24 h-16 rounded-lg shadow-xl" />
               <div className="text-white">
                 <h1 className="text-4xl lg:text-5xl font-bold mb-2">
                   {country.name} eSIM
                 </h1>
                 <p className="text-xl text-white/80">
-                  Instant mobile data • {country.plans[0]?.speed || '4G/LTE'} speeds
+                  Instant mobile data - {country.plans[0]?.speed || '4G/LTE'} speeds
                 </p>
               </div>
             </motion.div>
@@ -195,10 +194,10 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { icon: Wifi, title: 'High-Speed Data', desc: country.plans[0]?.speed || '4G/LTE speeds' },
+                { icon: WifiHigh, title: 'High-Speed Data', desc: country.plans[0]?.speed || '4G/LTE speeds' },
                 { icon: Clock, title: 'Instant Activation', desc: 'Start using immediately' },
-                { icon: Signal, title: 'Reliable Coverage', desc: 'Local carrier networks' },
-                { icon: Shield, title: 'Secure & Private', desc: 'No data logging' },
+                { icon: CellSignalFull, title: 'Reliable Coverage', desc: 'Local carrier networks' },
+                { icon: ShieldCheck, title: 'Secure & Private', desc: 'No data logging' },
               ].map((feature, i) => (
                 <motion.div
                   key={feature.title}
@@ -209,7 +208,7 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
                   className="flex items-start gap-4 p-4 rounded-xl bg-gray-50"
                 >
                   <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-5 h-5 text-indigo-600" />
+                    <feature.icon weight="duotone" className="w-5 h-5 text-indigo-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{feature.title}</h3>
@@ -262,7 +261,7 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
             <div className="rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center">
-                  <Smartphone className="w-7 h-7 text-indigo-600" />
+                  <DeviceMobile weight="duotone" className="w-7 h-7 text-indigo-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">Not sure if your phone supports eSIM?</h3>
@@ -274,7 +273,7 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
                 className="btn btn-primary whitespace-nowrap"
               >
                 Check Compatibility
-                <ChevronRight className="w-4 h-4" />
+                <CaretRight weight="bold" className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -293,7 +292,7 @@ export function CountryClient({ country, otherDestinations }: CountryClientProps
                     href={`/destinations/${dest.code.toLowerCase()}`}
                     className="flex-shrink-0 bg-white rounded-xl p-4 border border-gray-100 hover:border-indigo-200 hover:shadow-md transition-all min-w-[160px]"
                   >
-                    <span className="text-4xl mb-2 block">{dest.flag}</span>
+                    <FlagIcon code={dest.code} className="w-12 h-8 mb-2" />
                     <h3 className="font-semibold text-gray-900">{dest.name}</h3>
                     <p className="text-sm text-gray-500">From ${dest.lowestPrice.toFixed(2)}</p>
                   </Link>

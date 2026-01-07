@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
       packageCode: pkg.packageCode,
       slug: pkg.slug,
       country: getCountryName(locationCode),
+      countryCode: locationCode,
       flag: getCountryFlag(locationCode),
       data: dataGB >= 1 ? `${dataGB}GB` : `${Math.round(dataGB * 1024)}MB`,
       days: pkg.duration,
