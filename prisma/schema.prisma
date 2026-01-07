@@ -1,0 +1,103 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Simplified eSIM platform - no travel guides, just core functionality
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?
+  image         String?
+  credits       Int       @default(0) // In cents
+  referralCode  String    @unique @default(cuid())
+  referredBy    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  orders        Order[]
+  esims         ESim[]
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String
+  status        OrderStatus @default(PENDING)
+  total         Int         // In cents
+  currency      String      @default("USD")
+  promoCode     String?
+  discount      Int         @default(0)
+
+  country       String
+  countryName   String
+  planName      String
+  dataAmount    String
+  validity      Int         // Days
+
+  stripePaymentId String?
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  esim          ESim?
+}
+
+model ESim {
+  id            String      @id @default(cuid())
+  userId        String
+  orderId       String      @unique
+
+  iccid         String      @unique
+  qrCode        String      @db.Text
+  activationCode String?
+
+  status        ESimStatus  @default(INACTIVE)
+  dataUsed      BigInt      @default(0) // In bytes
+  dataLimit     BigInt      // In bytes
+  expiresAt     DateTime
+  activatedAt   DateTime?
+
+  country       String
+  countryName   String
+  planName      String
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model PromoCode {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  discount      Int       // Percentage (10 = 10%)
+  maxUses       Int?
+  usedCount     Int       @default(0)
+  validFrom     DateTime  @default(now())
+  validUntil    DateTime?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum ESimStatus {
+  INACTIVE
+  ACTIVE
+  EXPIRED
+  DEPLETED
+}
