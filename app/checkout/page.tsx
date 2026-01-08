@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
@@ -33,6 +34,7 @@ interface PlanData {
 function CheckoutContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { data: session, status: sessionStatus } = useSession()
   const planSlug = searchParams.get('plan') || ''
   const countryCode = searchParams.get('country')?.toUpperCase() || ''
 
@@ -52,6 +54,14 @@ function CheckoutContent() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [step, setStep] = useState(1)
   const [orderError, setOrderError] = useState<string | null>(null)
+
+  // If user is logged in, skip email step and use their account email
+  useEffect(() => {
+    if (sessionStatus === 'authenticated' && session?.user?.email) {
+      setEmail(session.user.email)
+      setStep(2) // Skip to payment
+    }
+  }, [session, sessionStatus])
 
   // Fetch plan data from API
   useEffect(() => {
