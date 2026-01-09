@@ -168,6 +168,13 @@ model Settings {
   referralBonus     Int   @default(500)  // $5.00 credit for referrer
   refereeBonus      Int   @default(200)  // $2.00 credit for referee
 
+  // Business info for invoices/PDFs
+  businessName    String?   @default("eSIMFly")
+  businessAddress String?   @default("123 Digital Way, Tech City, TC 10001")
+  businessEmail   String?   @default("support@esimfly.me")
+  businessPhone   String?   @default("+1 (555) 123-4567")
+  businessVAT     String?   // VAT/Tax ID number
+
   updatedAt     DateTime  @updatedAt
   updatedBy     String?   // Admin user ID who last updated
 }

@@ -1,10 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import crypto from 'crypto'
+
+const G2PAY_SIGNING_KEY = process.env.G2PAY_SIGNING_KEY || 'fLWeMSP1UjG9'
+
+// Verify HMAC-SHA256 signature from G2Pay
+function verifySignature(payload: string, signature: string | null): boolean {
+  if (!signature) {
+    console.warn('No signature provided in webhook request')
+    return false
+  }
+
+  const expectedSignature = crypto
+    .createHmac('sha256', G2PAY_SIGNING_KEY)
+    .update(payload)
+    .digest('hex')
+
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(signature.toLowerCase()),
+      Buffer.from(expectedSignature.toLowerCase())
+    )
+  } catch {
+    return false
+  }
+}
 
 // G2Pay webhook handler for async payment notifications
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    // Get raw body for signature verification
+    const rawBody = await request.text()
+    const signature = request.headers.get('Signature')
+
+    // Verify signature if signing key is configured
+    if (G2PAY_SIGNING_KEY && G2PAY_SIGNING_KEY !== 'YOUR_SIGNING_KEY') {
+      if (!verifySignature(rawBody, signature)) {
+        console.error('Invalid webhook signature')
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+      }
+      console.log('Webhook signature verified successfully')
+    }
+
+    const body = JSON.parse(rawBody)
 
     // Log webhook payload for debugging
     console.log('G2Pay webhook received:', JSON.stringify(body, null, 2))

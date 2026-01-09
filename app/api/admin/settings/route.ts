@@ -42,6 +42,11 @@ export async function PATCH(request: NextRequest) {
       freeDataBonus,
       referralBonus,
       refereeBonus,
+      businessName,
+      businessAddress,
+      businessEmail,
+      businessPhone,
+      businessVAT,
     } = body
 
     // Build update data
@@ -75,6 +80,13 @@ export async function PATCH(request: NextRequest) {
     if (freeDataBonus !== undefined) updateData.freeDataBonus = freeDataBonus
     if (referralBonus !== undefined) updateData.referralBonus = referralBonus
     if (refereeBonus !== undefined) updateData.refereeBonus = refereeBonus
+
+    // Business info fields
+    if (businessName !== undefined) updateData.businessName = businessName
+    if (businessAddress !== undefined) updateData.businessAddress = businessAddress
+    if (businessEmail !== undefined) updateData.businessEmail = businessEmail
+    if (businessPhone !== undefined) updateData.businessPhone = businessPhone
+    if (businessVAT !== undefined) updateData.businessVAT = businessVAT
 
     const settings = await prisma.settings.upsert({
       where: { id: 'default' },

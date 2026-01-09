@@ -13,10 +13,26 @@ interface InvoiceData {
   discount: number
   total: number
   promoCode?: string
+  status?: string
 }
 
-export function generateInvoicePDF(data: InvoiceData): Buffer {
+interface BusinessSettings {
+  businessName?: string | null
+  businessAddress?: string | null
+  businessEmail?: string | null
+  businessPhone?: string | null
+  businessVAT?: string | null
+}
+
+export function generateInvoicePDF(data: InvoiceData, business?: BusinessSettings): Buffer {
   const doc = new jsPDF()
+
+  // Business info with defaults
+  const businessName = business?.businessName || 'eSIMFly'
+  const businessAddress = business?.businessAddress || '123 Digital Street\nLondon, UK EC1A 1BB'
+  const businessEmail = business?.businessEmail || 'support@esimfly.me'
+  const businessPhone = business?.businessPhone || ''
+  const businessVAT = business?.businessVAT || ''
 
   const primaryColor = [79, 70, 229] as [number, number, number] // Indigo
   const textColor = [26, 26, 26] as [number, number, number]
@@ -30,7 +46,7 @@ export function generateInvoicePDF(data: InvoiceData): Buffer {
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(28)
   doc.setFont('helvetica', 'bold')
-  doc.text('eSIMFly', 20, 28)
+  doc.text(businessName, 20, 28)
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
@@ -42,10 +58,28 @@ export function generateInvoicePDF(data: InvoiceData): Buffer {
   doc.setTextColor(...grayColor)
   doc.setFontSize(9)
   let y = 60
-  doc.text('eSIMFly Limited', 20, y)
-  doc.text('123 Digital Street', 20, y + 5)
-  doc.text('London, UK EC1A 1BB', 20, y + 10)
-  doc.text('support@esimfly.me', 20, y + 15)
+  doc.text(businessName, 20, y)
+
+  // Split address into lines
+  const addressLines = businessAddress.split('\n')
+  addressLines.forEach((line, i) => {
+    doc.text(line.trim(), 20, y + 5 + (i * 5))
+  })
+  y += 5 + (addressLines.length * 5)
+
+  if (businessEmail) {
+    doc.text(businessEmail, 20, y)
+    y += 5
+  }
+  if (businessPhone) {
+    doc.text(businessPhone, 20, y)
+    y += 5
+  }
+  if (businessVAT) {
+    doc.text(`VAT: ${businessVAT}`, 20, y)
+  }
+
+  y = 60
 
   // Bill To
   doc.setTextColor(...textColor)
@@ -141,8 +175,8 @@ export function generateInvoicePDF(data: InvoiceData): Buffer {
   doc.setTextColor(...grayColor)
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
-  doc.text('Thank you for choosing eSIMFly!', 105, y + 8, { align: 'center' })
-  doc.text('For support, visit esimfly.me/help or email support@esimfly.me', 105, y + 14, { align: 'center' })
+  doc.text(`Thank you for choosing ${businessName}!`, 105, y + 8, { align: 'center' })
+  doc.text(`For support, email ${businessEmail}`, 105, y + 14, { align: 'center' })
 
   // Return as buffer
   const arrayBuffer = doc.output('arraybuffer')

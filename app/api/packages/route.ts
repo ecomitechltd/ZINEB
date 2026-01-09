@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPackages, priceToUSD, bytesToGB, getCountryName, getCountryFlag, getRegion } from '@/lib/esim-api'
+import { getSettings } from '@/lib/admin'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 300 // Cache for 5 minutes
+
+// Apply markup to price
+function applyMarkup(price: number, markupPercent: number): number {
+  const markup = price * (markupPercent / 100)
+  // Round to 2 decimal places
+  return Math.round((price + markup) * 100) / 100
+}
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const country = searchParams.get('country')?.toUpperCase()
+
+    // Get settings for markup
+    const settings = await getSettings()
+    const markupPercent = settings.markupPercent || 0
 
     const { packageList } = await getPackages({
       locationCode: country || '',
@@ -51,7 +63,8 @@ export async function GET(request: NextRequest) {
         }
 
         const countryData = packagesMap.get(locationCode)!
-        const priceUSD = priceToUSD(pkg.price)
+        const basePriceUSD = priceToUSD(pkg.price)
+        const priceUSD = applyMarkup(basePriceUSD, markupPercent)
         const dataGB = bytesToGB(pkg.volume)
 
         // Add plan if not duplicate

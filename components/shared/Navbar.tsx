@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AirplaneTilt, List, X, User, SignOut, CaretDown, ArrowRight } from '@phosphor-icons/react'
+import { AirplaneTilt, List, X, User, SignOut, CaretDown, ArrowRight, GearSix } from '@phosphor-icons/react'
 import { WalletBalance } from '@/components/wallet'
 
 export function Navbar() {
@@ -93,6 +93,16 @@ export function Navbar() {
                         <User weight="bold" className="w-4 h-4" />
                         Dashboard
                       </Link>
+                      {(session.user as { role?: string }).role === 'ADMIN' && (
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-3 px-4 py-3 hover:bg-purple-50 text-gray-700 font-medium transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          <GearSix weight="bold" className="w-4 h-4" />
+                          Admin Panel
+                        </Link>
+                      )}
                       <div className="h-px bg-gray-100 mx-3 my-1" />
                       <button
                         onClick={() => signOut()}
@@ -163,6 +173,15 @@ export function Navbar() {
                     >
                       Dashboard
                     </Link>
+                    {(session.user as { role?: string }).role === 'ADMIN' && (
+                      <Link
+                        href="/admin"
+                        className="block py-3 px-4 text-purple-600 font-semibold uppercase tracking-wide"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Admin Panel
+                      </Link>
+                    )}
                     <button
                       onClick={() => signOut()}
                       className="block py-3 px-4 text-red-600 font-semibold uppercase tracking-wide w-full text-left"
