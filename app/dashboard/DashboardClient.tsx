@@ -26,6 +26,10 @@ import {
   RefreshCw,
   CheckCircle,
   Download,
+  Wallet,
+  ArrowUpCircle,
+  ArrowDownCircle,
+  AlertCircle,
 } from 'lucide-react'
 
 interface ESim {
@@ -55,6 +59,16 @@ interface Order {
   status: string
 }
 
+interface WalletTransaction {
+  id: string
+  type: 'topup' | 'purchase' | 'refund' | 'bonus'
+  amount: number // In cents (positive for credit, negative for debit)
+  balance: number // Balance after transaction in cents
+  description: string
+  status: 'pending' | 'completed' | 'failed'
+  date: string
+}
+
 interface DashboardClientProps {
   user: {
     name: string
@@ -69,10 +83,12 @@ interface DashboardClientProps {
   }
   paymentError?: string
   paymentSuccess?: string
+  walletBalance?: number // In cents
+  walletTransactions?: WalletTransaction[]
 }
 
-export function DashboardClient({ user, esims, orders, stats, paymentError, paymentSuccess }: DashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<'esims' | 'orders'>('esims')
+export function DashboardClient({ user, esims, orders, stats, paymentError, paymentSuccess, walletBalance = 0, walletTransactions = [] }: DashboardClientProps) {
+  const [activeTab, setActiveTab] = useState<'esims' | 'orders' | 'wallet'>('esims')
   const [selectedEsim, setSelectedEsim] = useState<ESim | null>(null)
   const [copied, setCopied] = useState(false)
   const [giftEsim, setGiftEsim] = useState<ESim | null>(null)
@@ -249,6 +265,17 @@ export function DashboardClient({ user, esims, orders, stats, paymentError, paym
               }`}
             >
               Order History
+            </button>
+            <button
+              onClick={() => setActiveTab('wallet')}
+              className={`px-5 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'wallet'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <Wallet className="w-4 h-4" />
+              Wallet
             </button>
           </div>
 
@@ -493,6 +520,118 @@ export function DashboardClient({ user, esims, orders, stats, paymentError, paym
                   </div>
                 </div>
               )}
+            </motion.div>
+          )}
+
+          {/* Wallet Tab */}
+          {activeTab === 'wallet' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {/* Wallet Balance Card */}
+              <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 mb-6 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/80 text-sm mb-1">Current Balance</p>
+                    <p className="text-3xl font-bold">${(walletBalance / 100).toFixed(2)}</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Wallet className="w-7 h-7 text-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Transaction History */}
+              <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h3 className="text-lg font-semibold text-gray-900">Transaction History</h3>
+                </div>
+                {walletTransactions.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Wallet className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No transactions yet
+                    </h3>
+                    <p className="text-gray-500">
+                      Your wallet activity will appear here.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-100">
+                    {walletTransactions.map((tx) => (
+                      <div key={tx.id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            tx.status === 'failed'
+                              ? 'bg-red-100'
+                              : tx.status === 'pending'
+                              ? 'bg-yellow-100'
+                              : tx.amount > 0
+                              ? 'bg-green-100'
+                              : 'bg-gray-100'
+                          }`}>
+                            {tx.status === 'failed' ? (
+                              <XCircle className="w-5 h-5 text-red-600" />
+                            ) : tx.status === 'pending' ? (
+                              <Clock className="w-5 h-5 text-yellow-600" />
+                            ) : tx.amount > 0 ? (
+                              <ArrowUpCircle className="w-5 h-5 text-green-600" />
+                            ) : (
+                              <ArrowDownCircle className="w-5 h-5 text-gray-600" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{tx.description}</p>
+                            <p className="text-sm text-gray-500">
+                              {new Date(tx.date).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className={`font-semibold ${
+                            tx.status === 'failed'
+                              ? 'text-red-600'
+                              : tx.status === 'pending'
+                              ? 'text-yellow-600'
+                              : tx.amount > 0
+                              ? 'text-green-600'
+                              : 'text-gray-900'
+                          }`}>
+                            {tx.status === 'failed' ? (
+                              'Failed'
+                            ) : tx.status === 'pending' ? (
+                              'Pending'
+                            ) : (
+                              `${tx.amount > 0 ? '+' : ''}$${(Math.abs(tx.amount) / 100).toFixed(2)}`
+                            )}
+                          </p>
+                          {tx.status === 'completed' && (
+                            <p className="text-xs text-gray-500">
+                              Balance: ${(tx.balance / 100).toFixed(2)}
+                            </p>
+                          )}
+                          {tx.status !== 'completed' && (
+                            <p className={`text-xs ${
+                              tx.status === 'failed' ? 'text-red-500' : 'text-yellow-500'
+                            }`}>
+                              {tx.status === 'failed' ? 'Payment declined' : 'Processing...'}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
         </div>

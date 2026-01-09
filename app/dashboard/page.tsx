@@ -27,6 +27,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     orderBy: { createdAt: 'desc' },
   })
 
+  // Fetch wallet transactions (topups, purchases, etc.) - including failed ones
+  const walletTransactions = await prisma.walletTransaction.findMany({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: 'desc' },
+    take: 50,
+  })
+
+  // Get current wallet balance
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { credits: true },
+  })
+
   // Calculate stats
   const activeEsims = esims.filter(e => e.status === 'ACTIVE').length
   const countriesVisited = new Set(esims.map(e => e.countryName)).size
@@ -88,6 +101,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         countriesVisited,
         totalSaved: Math.round(totalSaved * 100) / 100,
       }}
+      walletBalance={user?.credits || 0}
+      walletTransactions={walletTransactions.map(t => ({
+        id: t.id,
+        type: t.type.toLowerCase() as 'topup' | 'purchase' | 'refund' | 'bonus',
+        amount: t.amount,
+        balance: t.balance,
+        description: t.description,
+        status: t.status.toLowerCase() as 'pending' | 'completed' | 'failed',
+        date: t.createdAt.toISOString(),
+      }))}
     />
   )
 }

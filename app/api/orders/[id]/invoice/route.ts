@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { generateInvoicePDF } from '@/lib/invoice'
+import { getSettings } from '@/lib/admin'
 
 export async function GET(
   request: NextRequest,
@@ -37,21 +38,33 @@ export async function GET(
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
+    // Get business settings
+    const settings = await getSettings()
+
     // Generate PDF
-    const pdfBuffer = generateInvoicePDF({
-      orderId: order.id,
-      orderDate: order.createdAt,
-      customerName: order.user.name || 'Customer',
-      customerEmail: order.user.email,
-      country: order.countryName,
-      planName: order.planName,
-      dataAmount: order.dataAmount,
-      validity: order.validity,
-      subtotal: order.total + order.discount,
-      discount: order.discount,
-      total: order.total,
-      promoCode: order.promoCode || undefined,
-    })
+    const pdfBuffer = generateInvoicePDF(
+      {
+        orderId: order.id,
+        orderDate: order.createdAt,
+        customerName: order.user.name || 'Customer',
+        customerEmail: order.user.email,
+        country: order.countryName,
+        planName: order.planName,
+        dataAmount: order.dataAmount,
+        validity: order.validity,
+        subtotal: order.total + order.discount,
+        discount: order.discount,
+        total: order.total,
+        promoCode: order.promoCode || undefined,
+      },
+      {
+        businessName: settings.businessName,
+        businessAddress: settings.businessAddress,
+        businessEmail: settings.businessEmail,
+        businessPhone: settings.businessPhone,
+        businessVAT: settings.businessVAT,
+      }
+    )
 
     // Return PDF as download
     return new NextResponse(new Uint8Array(pdfBuffer), {
