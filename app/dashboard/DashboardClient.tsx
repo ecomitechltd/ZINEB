@@ -25,6 +25,7 @@ import {
   XCircle,
   RefreshCw,
   CheckCircle,
+  Download,
 } from 'lucide-react'
 
 interface ESim {
@@ -472,20 +473,17 @@ export function DashboardClient({ user, esims, orders, stats, paymentError, paym
                                   <button
                                     onClick={() => downloadInvoice(order.id)}
                                     disabled={downloadingInvoice === order.id}
-                                    className="text-gray-500 hover:text-indigo-600 text-sm font-medium flex items-center gap-1 disabled:opacity-50"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors disabled:opacity-50"
                                     title="Download Invoice"
                                   >
                                     {downloadingInvoice === order.id ? (
                                       <Loader2 className="w-4 h-4 animate-spin" />
                                     ) : (
-                                      <FileText className="w-4 h-4" />
+                                      <Download className="w-4 h-4" />
                                     )}
+                                    Invoice
                                   </button>
                                 )}
-                                <button className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1">
-                                  View
-                                  <ChevronRight className="w-4 h-4" />
-                                </button>
                               </div>
                             </td>
                           </tr>
