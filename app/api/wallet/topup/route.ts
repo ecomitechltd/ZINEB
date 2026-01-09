@@ -81,6 +81,17 @@ export async function POST(request: NextRequest) {
       webhookUrl: `${BASE_URL}/api/wallet/topup/webhook`,
     }
 
+    // Debug logging
+    console.log('=== G2PAY DEBUG ===')
+    console.log('G2PAY_API_URL:', G2PAY_API_URL)
+    console.log('G2PAY_API_KEY length:', G2PAY_API_KEY?.length)
+    console.log('G2PAY_API_KEY first 10 chars:', G2PAY_API_KEY?.substring(0, 10))
+    console.log('G2PAY_API_KEY last 5 chars:', G2PAY_API_KEY?.slice(-5))
+    console.log('Full URL:', `${G2PAY_API_URL}/payments`)
+    console.log('Request body:', JSON.stringify(checkoutRequestData, null, 2))
+    console.log('Authorization header:', `Bearer ${G2PAY_API_KEY?.substring(0, 10)}...${G2PAY_API_KEY?.slice(-5)}`)
+    console.log('===================')
+
     const response = await fetch(`${G2PAY_API_URL}/payments`, {
       method: 'POST',
       headers: {
@@ -93,6 +104,8 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('G2Pay API error:', errorText)
+      console.error('Response status:', response.status)
+      console.error('Response headers:', JSON.stringify(Object.fromEntries(response.headers.entries())))
 
       // Mark transaction as failed
       await prisma.walletTransaction.update({
