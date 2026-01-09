@@ -21,6 +21,9 @@ import {
   X,
   Copy,
   Check,
+  Gift,
+  FileText,
+  Loader2,
 } from 'lucide-react'
 
 interface ESim {
@@ -36,6 +39,8 @@ interface ESim {
   activatedAt: string | null
   qrCode: string | null
   activationCode: string | null
+  isGifted?: boolean
+  giftedToEmail?: string | null
 }
 
 interface Order {
@@ -66,11 +71,77 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
   const [activeTab, setActiveTab] = useState<'esims' | 'orders'>('esims')
   const [selectedEsim, setSelectedEsim] = useState<ESim | null>(null)
   const [copied, setCopied] = useState(false)
+  const [giftEsim, setGiftEsim] = useState<ESim | null>(null)
+  const [giftForm, setGiftForm] = useState({ email: '', name: '', message: '' })
+  const [giftLoading, setGiftLoading] = useState(false)
+  const [giftSuccess, setGiftSuccess] = useState(false)
+  const [giftError, setGiftError] = useState('')
+  const [downloadingInvoice, setDownloadingInvoice] = useState<string | null>(null)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleGiftSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!giftEsim) return
+
+    setGiftLoading(true)
+    setGiftError('')
+
+    try {
+      const res = await fetch(`/api/esim/${giftEsim.id}/gift`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipientEmail: giftForm.email,
+          recipientName: giftForm.name,
+          message: giftForm.message,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send gift')
+      }
+
+      setGiftSuccess(true)
+      setTimeout(() => {
+        setGiftEsim(null)
+        setGiftForm({ email: '', name: '', message: '' })
+        setGiftSuccess(false)
+        window.location.reload()
+      }, 2000)
+    } catch (err) {
+      setGiftError(err instanceof Error ? err.message : 'Failed to send gift')
+    } finally {
+      setGiftLoading(false)
+    }
+  }
+
+  const downloadInvoice = async (orderId: string) => {
+    setDownloadingInvoice(orderId)
+    try {
+      const res = await fetch(`/api/orders/${orderId}/invoice`)
+      if (!res.ok) throw new Error('Failed to download invoice')
+
+      const blob = await res.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `eSIMFly-Invoice-${orderId.slice(-8).toUpperCase()}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err) {
+      console.error('Invoice download error:', err)
+    } finally {
+      setDownloadingInvoice(null)
+    }
   }
 
   return (
@@ -269,6 +340,21 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
                               View QR Code
                             </button>
                           )}
+                          {esim.status === 'pending' && !esim.isGifted && (
+                            <button
+                              onClick={() => setGiftEsim(esim)}
+                              className="btn btn-outline text-sm py-2"
+                            >
+                              <Gift className="w-4 h-4" />
+                              Gift
+                            </button>
+                          )}
+                          {esim.isGifted && esim.giftedToEmail && (
+                            <span className="text-sm text-gray-500 flex items-center gap-1">
+                              <Gift className="w-4 h-4 text-pink-500" />
+                              Gifted to {esim.giftedToEmail}
+                            </span>
+                          )}
                           <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
                             <MoreVertical className="w-5 h-5" />
                           </button>
@@ -369,10 +455,26 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
                               </span>
                             </td>
                             <td className="px-6 py-4">
-                              <button className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1">
-                                View
-                                <ChevronRight className="w-4 h-4" />
-                              </button>
+                              <div className="flex items-center gap-2">
+                                {(order.status === 'completed' || order.status === 'paid') && (
+                                  <button
+                                    onClick={() => downloadInvoice(order.id)}
+                                    disabled={downloadingInvoice === order.id}
+                                    className="text-gray-500 hover:text-indigo-600 text-sm font-medium flex items-center gap-1 disabled:opacity-50"
+                                    title="Download Invoice"
+                                  >
+                                    {downloadingInvoice === order.id ? (
+                                      <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                      <FileText className="w-4 h-4" />
+                                    )}
+                                  </button>
+                                )}
+                                <button className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1">
+                                  View
+                                  <ChevronRight className="w-4 h-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -529,6 +631,139 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
                   Installation Guide
                 </Link>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Gift eSIM Modal */}
+      <AnimatePresence>
+        {giftEsim && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => !giftLoading && setGiftEsim(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl"
+            >
+              {giftSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Gift Sent!</h3>
+                  <p className="text-gray-500">
+                    Your eSIM has been sent to {giftForm.email}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                        <Gift className="w-5 h-5 text-pink-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900">Gift this eSIM</h3>
+                        <p className="text-sm text-gray-500">{giftEsim.country} - {giftEsim.plan}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setGiftEsim(null)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      disabled={giftLoading}
+                    >
+                      <X className="w-5 h-5 text-gray-400" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleGiftSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Recipient Email *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={giftForm.email}
+                        onChange={(e) => setGiftForm({ ...giftForm, email: e.target.value })}
+                        className="input"
+                        placeholder="friend@email.com"
+                        disabled={giftLoading}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Recipient Name
+                      </label>
+                      <input
+                        type="text"
+                        value={giftForm.name}
+                        onChange={(e) => setGiftForm({ ...giftForm, name: e.target.value })}
+                        className="input"
+                        placeholder="John"
+                        disabled={giftLoading}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Personal Message
+                      </label>
+                      <textarea
+                        value={giftForm.message}
+                        onChange={(e) => setGiftForm({ ...giftForm, message: e.target.value })}
+                        className="input min-h-[80px] resize-none"
+                        placeholder="Have a great trip! Stay connected."
+                        disabled={giftLoading}
+                      />
+                    </div>
+
+                    {giftError && (
+                      <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+                        {giftError}
+                      </p>
+                    )}
+
+                    <div className="flex gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setGiftEsim(null)}
+                        className="flex-1 btn btn-outline"
+                        disabled={giftLoading}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="flex-1 btn btn-primary"
+                        disabled={giftLoading}
+                      >
+                        {giftLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Gift className="w-4 h-4" />
+                            Send Gift
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}

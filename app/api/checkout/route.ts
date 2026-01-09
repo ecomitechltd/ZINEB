@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getPackages, priceToUSD, bytesToGB, getCountryName, orderProfiles, queryProfiles } from '@/lib/esim-api'
+import { sendPurchaseEmail } from '@/lib/email'
 
 const BASE_URL = process.env.NEXTAUTH_URL || 'https://esimfly.me'
 
@@ -193,6 +194,20 @@ export async function POST(request: NextRequest) {
           where: { id: order.id },
           data: { status: 'COMPLETED' },
         })
+
+        // Send purchase confirmation email (don't block response on email failure)
+        sendPurchaseEmail({
+          email: session.user.email!,
+          name: session.user.name || session.user.email!.split('@')[0],
+          orderId: order.id,
+          country: countryName,
+          planName: `${dataGB >= 1 ? `${dataGB}GB` : `${Math.round(dataGB * 1024)}MB`} / ${pkg.duration} days`,
+          dataAmount: dataGB >= 1 ? `${dataGB}GB` : `${Math.round(dataGB * 1024)}MB`,
+          validity: pkg.duration,
+          total: totalPriceCents,
+          qrCodeUrl: esimProfile.qrCodeUrl,
+          activationCode: esimProfile.ac || undefined,
+        }).catch((err) => console.error('Failed to send purchase email:', err))
 
         return NextResponse.json({
           success: true,

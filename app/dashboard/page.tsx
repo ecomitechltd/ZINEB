@@ -63,6 +63,8 @@ export default async function DashboardPage() {
           activatedAt: e.activatedAt?.toISOString() || null,
           qrCode: e.qrCode,
           activationCode: e.activationCode,
+          isGifted: e.isGifted,
+          giftedToEmail: e.giftedToEmail,
         }
       })}
       orders={orders.map(o => ({

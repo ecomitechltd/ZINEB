@@ -98,6 +98,13 @@ model ESim {
   countryName   String
   planName      String
 
+  // Gift tracking
+  isGifted      Boolean     @default(false)
+  giftedToEmail String?
+  giftedToName  String?
+  giftMessage   String?
+  giftedAt      DateTime?
+
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
