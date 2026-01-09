@@ -33,11 +33,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
+        // Update last login
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLoginAt: new Date() },
+        })
+
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           image: user.image,
+          role: user.role,
         }
       },
     }),
@@ -50,12 +57,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.role = (user as { role?: string }).role || 'USER'
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        ;(session.user as { role?: string }).role = token.role as string
       }
       return session
     },

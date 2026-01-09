@@ -15,15 +15,23 @@ model User {
   name          String?
   password      String?
   image         String?
+  role          UserRole  @default(USER)
   credits       Int       @default(0) // Wallet balance in cents
   referralCode  String    @unique @default(cuid())
   referredBy    String?
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   orders              Order[]
   esims               ESim[]
   walletTransactions  WalletTransaction[]
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model WalletTransaction {
@@ -137,4 +145,44 @@ enum ESimStatus {
   ACTIVE
   EXPIRED
   DEPLETED
+}
+
+// Admin settings for markup and configuration
+model Settings {
+  id            String    @id @default("default")
+
+  // Markup configuration (percentage)
+  markupPercent Int       @default(30) // 30% markup on base price
+
+  // Regional markup overrides (JSON: { "JP": 25, "US": 20 })
+  regionalMarkup String?  @db.Text
+
+  // Minimum order value in cents
+  minOrderValue Int       @default(100) // $1.00
+
+  // Free data threshold (orders above get bonus data)
+  freeDataThreshold Int   @default(5000) // $50.00
+  freeDataBonus     Int   @default(500)  // 500MB bonus
+
+  // Referral settings
+  referralBonus     Int   @default(500)  // $5.00 credit for referrer
+  refereeBonus      Int   @default(200)  // $2.00 credit for referee
+
+  updatedAt     DateTime  @updatedAt
+  updatedBy     String?   // Admin user ID who last updated
+}
+
+// Admin audit log for tracking changes
+model AdminAuditLog {
+  id            String    @id @default(cuid())
+  adminId       String
+  action        String    // CREATE, UPDATE, DELETE
+  entity        String    // User, Order, Settings, etc.
+  entityId      String?
+  changes       String?   @db.Text // JSON of changes
+  ipAddress     String?
+  createdAt     DateTime  @default(now())
+
+  @@index([adminId, createdAt])
+  @@index([entity, entityId])
 }
