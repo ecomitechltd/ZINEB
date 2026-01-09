@@ -103,13 +103,13 @@ export async function GET(request: NextRequest) {
   // Calculate daily stats for chart
   const dailyStats = await prisma.$queryRaw`
     SELECT
-      DATE(created_at) as date,
+      DATE("createdAt") as date,
       COUNT(*) as orders,
-      SUM(total) as revenue
+      COALESCE(SUM(total), 0) as revenue
     FROM "Order"
-    WHERE created_at >= ${startDate}
+    WHERE "createdAt" >= ${startDate}
       AND status IN ('PAID', 'COMPLETED')
-    GROUP BY DATE(created_at)
+    GROUP BY DATE("createdAt")
     ORDER BY date ASC
   ` as Array<{ date: Date; orders: bigint; revenue: bigint }>
 

@@ -22,6 +22,9 @@ import {
   Gift,
   FileText,
   Loader2,
+  XCircle,
+  RefreshCw,
+  CheckCircle,
 } from 'lucide-react'
 
 interface ESim {
@@ -63,9 +66,11 @@ interface DashboardClientProps {
     countriesVisited: number
     totalSaved: number
   }
+  paymentError?: string
+  paymentSuccess?: string
 }
 
-export function DashboardClient({ user, esims, orders, stats }: DashboardClientProps) {
+export function DashboardClient({ user, esims, orders, stats, paymentError, paymentSuccess }: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState<'esims' | 'orders'>('esims')
   const [selectedEsim, setSelectedEsim] = useState<ESim | null>(null)
   const [copied, setCopied] = useState(false)
@@ -75,6 +80,7 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
   const [giftSuccess, setGiftSuccess] = useState(false)
   const [giftError, setGiftError] = useState('')
   const [downloadingInvoice, setDownloadingInvoice] = useState<string | null>(null)
+  const [showPaymentModal, setShowPaymentModal] = useState(!!paymentError || !!paymentSuccess)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -449,10 +455,12 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
                             <td className="px-6 py-4 font-semibold">${order.amount.toFixed(2)}</td>
                             <td className="px-6 py-4">
                               <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                order.status === 'completed'
+                                order.status === 'completed' || order.status === 'paid'
                                   ? 'bg-green-100 text-green-600'
                                   : order.status === 'pending'
                                   ? 'bg-yellow-100 text-yellow-600'
+                                  : order.status === 'failed'
+                                  ? 'bg-red-100 text-red-600'
                                   : 'bg-gray-100 text-gray-600'
                               }`}>
                                 {order.status}
@@ -635,6 +643,106 @@ export function DashboardClient({ user, esims, orders, stats }: DashboardClientP
                   Installation Guide
                 </Link>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Payment Result Modal */}
+      <AnimatePresence>
+        {showPaymentModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => {
+              setShowPaymentModal(false)
+              // Clear URL params
+              window.history.replaceState({}, '', '/dashboard')
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl max-w-md w-full p-8 shadow-xl text-center"
+            >
+              {paymentError ? (
+                <>
+                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <XCircle className="w-10 h-10 text-red-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    Transaction Declined
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Sorry, your payment could not be processed. Please try again or use a different payment method.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/dashboard?tab=wallet"
+                      onClick={() => setShowPaymentModal(false)}
+                      className="flex-1 btn btn-primary"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Try Again
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setShowPaymentModal(false)
+                        window.history.replaceState({}, '', '/dashboard')
+                      }}
+                      className="flex-1 btn btn-outline"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              ) : paymentSuccess === 'topup' ? (
+                <>
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    Wallet Topped Up!
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Your wallet has been successfully topped up. You can now purchase eSIMs.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setShowPaymentModal(false)
+                      window.history.replaceState({}, '', '/dashboard')
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Continue Shopping
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    Success!
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Your operation completed successfully.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setShowPaymentModal(false)
+                      window.history.replaceState({}, '', '/dashboard')
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}

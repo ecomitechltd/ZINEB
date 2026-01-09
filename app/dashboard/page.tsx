@@ -3,8 +3,13 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { DashboardClient } from './DashboardClient'
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await auth()
+  const params = await searchParams
 
   if (!session?.user) {
     redirect('/login')
@@ -45,6 +50,8 @@ export default async function DashboardPage() {
         name: session.user.name || 'Traveler',
         email: session.user.email || '',
       }}
+      paymentError={params.error}
+      paymentSuccess={params.success}
       esims={esims.map(e => {
         // Convert bytes to GB
         const dataUsedGB = Number(e.dataUsed) / (1024 * 1024 * 1024)
