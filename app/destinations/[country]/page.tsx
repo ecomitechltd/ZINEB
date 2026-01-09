@@ -9,33 +9,8 @@ interface Props {
 // Popular destinations for "Other Destinations" section
 const POPULAR_COUNTRIES = ['JP', 'US', 'TH', 'GB', 'FR', 'KR', 'DE', 'IT', 'ES', 'AU', 'SG', 'CA']
 
-// All supported country codes for static generation
-const ALL_COUNTRY_CODES = [
-  // Europe
-  'GB', 'FR', 'DE', 'IT', 'ES', 'NL', 'PT', 'CH', 'AT', 'BE',
-  'GR', 'PL', 'CZ', 'SE', 'NO', 'DK', 'FI', 'IE',
-  // Asia
-  'JP', 'KR', 'SG', 'TH', 'MY', 'ID', 'VN', 'PH', 'TW', 'HK',
-  'IN', 'CN', 'MO', 'LK', 'NP',
-  // Americas
-  'US', 'CA', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'CR', 'PA', 'PR',
-  // Oceania
-  'AU', 'NZ', 'FJ', 'GU',
-  // Middle East
-  'AE', 'TR', 'IL', 'SA', 'QA', 'OM', 'JO', 'EG',
-  // Africa
-  'ZA', 'MA', 'KE', 'TZ', 'GH', 'NG',
-]
-
-// Pre-generate all destination pages at build time for faster loading
-export async function generateStaticParams() {
-  return ALL_COUNTRY_CODES.map((code) => ({
-    country: code.toLowerCase(),
-  }))
-}
-
-// Revalidate every hour (3600 seconds) - pages are pre-built but can refresh
-export const revalidate = 3600
+// Cache pages for 5 minutes, allows dynamic rendering
+export const revalidate = 300
 
 export async function generateMetadata({ params }: Props) {
   const { country } = await params
