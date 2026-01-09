@@ -251,7 +251,7 @@ export default function InstallEsimPage() {
                   Browse Help Center
                 </Link>
                 <a
-                  href="mailto:support@esimfly.com"
+                  href="mailto:support@esimfly.me"
                   className="btn btn-primary"
                 >
                   Contact Support

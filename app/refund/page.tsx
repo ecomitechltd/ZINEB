@@ -125,7 +125,7 @@ export default function RefundPage() {
                   <li>Select the order you wish to refund</li>
                   <li>Click &quot;Request Refund&quot; and provide the reason</li>
                 </ol>
-                <p>Alternatively, you can email us at support@esimfly.com with:</p>
+                <p>Alternatively, you can email us at support@esimfly.me with:</p>
                 <ul>
                   <li>Your order number</li>
                   <li>Email address used for the purchase</li>
@@ -173,7 +173,7 @@ export default function RefundPage() {
                   If you have questions about our Refund Policy or need assistance with a refund request, please contact us:
                 </p>
                 <ul>
-                  <li>Email: support@esimfly.com</li>
+                  <li>Email: support@esimfly.me</li>
                   <li>Address: [Company Name], [Street Address], [City, Country, Postal Code]</li>
                 </ul>
               </div>
@@ -190,7 +190,7 @@ export default function RefundPage() {
                       Our support team is available 24/7 to assist you with refund requests or any other questions.
                     </p>
                     <a
-                      href="mailto:support@esimfly.com"
+                      href="mailto:support@esimfly.me"
                       className="inline-flex items-center gap-2 text-indigo-600 font-medium hover:text-indigo-700"
                     >
                       Contact Support

@@ -145,7 +145,7 @@ export default function TermsPage() {
                   If you have questions about these Terms, please contact us at:
                 </p>
                 <ul>
-                  <li>Email: legal@esimfly.com</li>
+                  <li>Email: legal@esimfly.me</li>
                   <li>Address: [Company Name], [Street Address], [City, Country, Postal Code]</li>
                 </ul>
               </div>

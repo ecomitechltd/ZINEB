@@ -180,7 +180,7 @@ export default function HelpPage() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <a
-                  href="mailto:support@esimfly.com"
+                  href="mailto:support@esimfly.me"
                   className="inline-flex items-center justify-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
                 >
                   <Mail className="w-5 h-5" />

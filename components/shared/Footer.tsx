@@ -54,7 +54,7 @@ export function Footer() {
             <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
             <ul className="space-y-2">
               <li><Link href="/help" className="text-gray-500 hover:text-indigo-600 text-sm">Help Center</Link></li>
-              <li><a href="mailto:support@esimfly.com" className="text-gray-500 hover:text-indigo-600 text-sm">Contact Us</a></li>
+              <li><a href="mailto:support@esimfly.me" className="text-gray-500 hover:text-indigo-600 text-sm">Contact Us</a></li>
             </ul>
           </div>
 
@@ -76,7 +76,7 @@ export function Footer() {
               </p>
               <div className="flex items-center gap-2 text-gray-500 text-sm">
                 <Mail className="w-4 h-4" />
-                <span>support@esimfly.com</span>
+                <span>support@esimfly.me</span>
               </div>
             </div>
 

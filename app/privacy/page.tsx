@@ -135,7 +135,7 @@ export default function PrivacyPage() {
                   <li>Withdraw consent where applicable</li>
                 </ul>
                 <p>
-                  To exercise these rights, please contact us at privacy@esimfly.com.
+                  To exercise these rights, please contact us at privacy@esimfly.me.
                 </p>
 
                 <h2>8. Cookies and Tracking</h2>
@@ -172,7 +172,7 @@ export default function PrivacyPage() {
                   If you have questions about this Privacy Policy or our data practices, please contact us at:
                 </p>
                 <ul>
-                  <li>Email: privacy@esimfly.com</li>
+                  <li>Email: privacy@esimfly.me</li>
                   <li>Address: [Company Name], [Street Address], [City, Country, Postal Code]</li>
                 </ul>
               </div>

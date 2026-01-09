@@ -14,10 +14,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash('demo123', 10);
 
   const testUser = await prisma.user.upsert({
-    where: { email: 'demo@esimfly.com' },
+    where: { email: 'demo@esimfly.me' },
     update: {},
     create: {
-      email: 'demo@esimfly.com',
+      email: 'demo@esimfly.me',
       name: 'Demo User',
       password: hashedPassword,
       credits: 1500, // $15.00 in credits
@@ -206,7 +206,7 @@ async function main() {
   console.log('Seeding complete!');
   console.log('========================================');
   console.log('\nLogin credentials:');
-  console.log('  Email: demo@esimfly.com');
+  console.log('  Email: demo@esimfly.me');
   console.log('  Password: demo123');
   console.log('\nThe test user has:');
   console.log('  - $15.00 in credits');
