@@ -4,8 +4,15 @@ import { prisma } from '@/lib/db'
 import { getPackages, priceToUSD, bytesToGB, getCountryName, orderProfiles, queryProfiles } from '@/lib/esim-api'
 import { sendPurchaseEmail } from '@/lib/email'
 import { notifyPurchase } from '@/lib/telegram'
+import { getSettings } from '@/lib/admin'
 
 const BASE_URL = process.env.NEXTAUTH_URL || 'https://esimfly.me'
+
+// Apply markup to price
+function applyMarkup(price: number, markupPercent: number): number {
+  const markup = price * (markupPercent / 100)
+  return Math.round((price + markup) * 100) / 100
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,18 +29,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Package code or slug required' }, { status: 400 })
     }
 
-    // Fetch package details to get price
-    const { packageList } = await getPackages({
-      packageCode: packageCode || '',
-      slug: slug || '',
-    })
+    // Fetch package details and settings in parallel
+    const [{ packageList }, settings] = await Promise.all([
+      getPackages({
+        packageCode: packageCode || '',
+        slug: slug || '',
+      }),
+      getSettings(),
+    ])
 
     const pkg = packageList.find(p => p.packageCode === packageCode || p.slug === slug)
     if (!pkg) {
       return NextResponse.json({ error: 'Package not found' }, { status: 404 })
     }
 
-    const priceUSD = priceToUSD(pkg.price)
+    // Apply markup to price
+    const markupPercent = settings.markupPercent || 0
+    const basePriceUSD = priceToUSD(pkg.price)
+    const priceUSD = applyMarkup(basePriceUSD, markupPercent)
     let discount = 0
 
     // Check promo code

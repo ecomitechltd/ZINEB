@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getPackagesByCountryCached, getAllPackagesCached, priceToUSD, bytesToGB, getCountryName, getCountryFlag } from '@/lib/esim-api'
+import { getSettings } from '@/lib/admin'
 import { CountryClient } from './CountryClient'
 
 interface Props {
@@ -11,6 +12,12 @@ const POPULAR_COUNTRIES = ['JP', 'US', 'TH', 'GB', 'FR', 'KR', 'DE', 'IT', 'ES',
 
 // Cache pages for 5 minutes, allows dynamic rendering
 export const revalidate = 300
+
+// Apply markup to price
+function applyMarkup(price: number, markupPercent: number): number {
+  const markup = price * (markupPercent / 100)
+  return Math.round((price + markup) * 100) / 100
+}
 
 export async function generateMetadata({ params }: Props) {
   const { country } = await params
@@ -28,8 +35,13 @@ export default async function CountryDetailPage({ params }: Props) {
   const countryCode = country.toUpperCase()
 
   try {
-    // Fetch packages for this country (cached for 5 minutes)
-    const { packageList } = await getPackagesByCountryCached(countryCode)
+    // Fetch packages for this country and settings in parallel
+    const [{ packageList }, settings] = await Promise.all([
+      getPackagesByCountryCached(countryCode),
+      getSettings(),
+    ])
+
+    const markupPercent = settings.markupPercent || 0
 
     // Filter packages that include this country
     const countryPackages = packageList.filter(pkg => {
@@ -44,12 +56,13 @@ export default async function CountryDetailPage({ params }: Props) {
     // Build country data
     const plans = countryPackages.map(pkg => {
       const dataGB = bytesToGB(pkg.volume)
+      const basePriceUSD = priceToUSD(pkg.price)
       return {
         id: pkg.packageCode,
         slug: pkg.slug,
         data: dataGB >= 1 ? `${dataGB}GB` : `${Math.round(dataGB * 1024)}MB`,
         days: pkg.duration,
-        price: priceToUSD(pkg.price),
+        price: applyMarkup(basePriceUSD, markupPercent),
         speed: pkg.speed,
         dataType: pkg.dataType,
       }
@@ -93,12 +106,12 @@ export default async function CountryDetailPage({ params }: Props) {
       })
 
       if (popularPackages.length > 0) {
-        const lowestPrice = Math.min(...popularPackages.map(p => priceToUSD(p.price)))
+        const lowestBasePrice = Math.min(...popularPackages.map(p => priceToUSD(p.price)))
         otherDestinations.push({
           code: popularCode,
           name: getCountryName(popularCode),
           flag: getCountryFlag(popularCode),
-          lowestPrice,
+          lowestPrice: applyMarkup(lowestBasePrice, markupPercent),
         })
       }
 

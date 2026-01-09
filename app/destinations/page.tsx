@@ -1,4 +1,5 @@
 import { getPackages, priceToUSD, getCountryName, getCountryFlag, getRegion } from '@/lib/esim-api'
+import { getSettings } from '@/lib/admin'
 import { DestinationsClient } from './DestinationsClient'
 
 // Popular countries (shown first in "Popular" tab)
@@ -6,8 +7,19 @@ const POPULAR_COUNTRIES = ['JP', 'US', 'TH', 'GB', 'FR', 'KR', 'DE', 'IT', 'ES',
 
 export const revalidate = 300 // Revalidate every 5 minutes
 
+// Apply markup to price
+function applyMarkup(price: number, markupPercent: number): number {
+  const markup = price * (markupPercent / 100)
+  return Math.round((price + markup) * 100) / 100
+}
+
 async function fetchDestinations() {
-  const { packageList } = await getPackages()
+  const [{ packageList }, settings] = await Promise.all([
+    getPackages(),
+    getSettings(),
+  ])
+
+  const markupPercent = settings.markupPercent || 0
 
   // Group packages by country
   const countriesMap = new Map<string, {
@@ -40,7 +52,8 @@ async function fetchDestinations() {
       }
 
       const countryData = countriesMap.get(locationCode)!
-      const priceUSD = priceToUSD(pkg.price)
+      const basePriceUSD = priceToUSD(pkg.price)
+      const priceUSD = applyMarkup(basePriceUSD, markupPercent)
 
       if (priceUSD < countryData.lowestPrice) {
         countryData.lowestPrice = priceUSD

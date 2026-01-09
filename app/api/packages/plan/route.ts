@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPackages, priceToUSD, bytesToGB, getCountryName, getCountryFlag } from '@/lib/esim-api'
+import { getSettings } from '@/lib/admin'
 
 export const dynamic = 'force-dynamic'
+
+// Apply markup to price
+function applyMarkup(price: number, markupPercent: number): number {
+  const markup = price * (markupPercent / 100)
+  return Math.round((price + markup) * 100) / 100
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,10 +20,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'slug or packageCode required' }, { status: 400 })
     }
 
-    const { packageList } = await getPackages({
-      slug: slug || '',
-      packageCode: packageCode || '',
-    })
+    const [{ packageList }, settings] = await Promise.all([
+      getPackages({
+        slug: slug || '',
+        packageCode: packageCode || '',
+      }),
+      getSettings(),
+    ])
+
+    const markupPercent = settings.markupPercent || 0
 
     // Find the specific package
     const pkg = packageList.find(p =>
@@ -30,6 +42,7 @@ export async function GET(request: NextRequest) {
     // Get country from location
     const locationCode = pkg.location.split(',')[0].trim()
     const dataGB = bytesToGB(pkg.volume)
+    const basePriceUSD = priceToUSD(pkg.price)
 
     return NextResponse.json({
       packageCode: pkg.packageCode,
@@ -39,7 +52,7 @@ export async function GET(request: NextRequest) {
       flag: getCountryFlag(locationCode),
       data: dataGB >= 1 ? `${dataGB}GB` : `${Math.round(dataGB * 1024)}MB`,
       days: pkg.duration,
-      price: priceToUSD(pkg.price),
+      price: applyMarkup(basePriceUSD, markupPercent),
       speed: pkg.speed,
       dataType: pkg.dataType,
     })
