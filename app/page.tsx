@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Navbar } from '@/components/shared/Navbar'
 import { Footer } from '@/components/shared/Footer'
 import { FlagIcon } from '@/components/shared/FlagIcon'
+import { AnimatedWorldMap } from '@/components/shared/AnimatedWorldMap'
 import {
   GlobeHemisphereWest,
   Lightning,
@@ -95,7 +96,7 @@ export default function HomePage() {
         <section className="relative overflow-hidden min-h-[70vh] flex items-start">
           {/* Background */}
           <div className="absolute inset-0 mesh-gradient" />
-          <div className="absolute inset-0 grid-pattern opacity-40" />
+          <AnimatedWorldMap />
 
           {/* Decorative blobs */}
           <div className="absolute top-32 left-0 w-[500px] h-[500px] blob blob-1" />
