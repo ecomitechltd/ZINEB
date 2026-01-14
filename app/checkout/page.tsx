@@ -37,7 +37,7 @@ function CheckoutContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { data: session, status: sessionStatus } = useSession()
-  const planSlug = searchParams.get('plan') || ''
+  const planParam = searchParams.get('plan') || ''
   const countryCode = searchParams.get('country')?.toUpperCase() || ''
 
   const [plan, setPlan] = useState<PlanData | null>(null)
@@ -82,16 +82,21 @@ function CheckoutContent() {
   // Fetch plan data from API
   useEffect(() => {
     async function fetchPlan() {
-      if (!planSlug) {
+      if (!planParam) {
         setError('No plan selected')
         setLoading(false)
         return
       }
 
       try {
-        const response = await fetch(`/api/packages/plan?slug=${planSlug}`)
+        let response = await fetch(`/api/packages/plan?slug=${encodeURIComponent(planParam)}`)
+
+        if (response.status === 404) {
+          response = await fetch(`/api/packages/plan?packageCode=${encodeURIComponent(planParam)}`)
+        }
+
         if (!response.ok) {
-          throw new Error('Plan not found')
+          throw new Error(`Plan not found (${response.status})`)
         }
         const data = await response.json()
         setPlan(data)
@@ -104,7 +109,7 @@ function CheckoutContent() {
     }
 
     fetchPlan()
-  }, [planSlug])
+  }, [planParam])
 
   const discount = promoApplied ? (plan?.price || 0) * (promoDiscount / 100) : 0
   const total = (plan?.price || 0) - discount
