@@ -1,14 +1,12 @@
 import { notFound } from 'next/navigation'
 import { getPackagesByCountryCached, getPackageDetailsCached, priceToUSD, bytesToGB, getCountryName, getCountryFlag } from '@/lib/esim-api'
 import { getSettings } from '@/lib/admin'
+import { POPULAR_DESTINATIONS } from '@/lib/constants'
 import { CountryClient } from './CountryClient'
 
 interface Props {
   params: Promise<{ country: string }>
 }
-
-// Popular destinations for "Other Destinations" section
-const POPULAR_COUNTRIES = ['JP', 'US', 'TH', 'GB', 'FR', 'KR', 'DE', 'IT', 'ES', 'AU', 'SG', 'CA']
 
 // Cache pages for 5 minutes, allows dynamic rendering
 export const revalidate = 300
@@ -145,34 +143,15 @@ export default async function CountryDetailPage({ params }: Props) {
       networks,
     }
 
-    const otherDestinations: { code: string; name: string; flag: string; lowestPrice: number }[] = []
-
-    const popularCodes = POPULAR_COUNTRIES.filter((code) => code !== countryCode)
-    const popularResults = await Promise.all(
-      popularCodes.map(async (popularCode) => {
-        try {
-          const { packageList: popularPackages } = await getPackagesByCountryCached(popularCode)
-          if (popularPackages.length === 0) return null
-
-          const lowestBasePrice = Math.min(...popularPackages.map((p) => priceToUSD(p.price)))
-          return {
-            code: popularCode,
-            name: getCountryName(popularCode),
-            flag: getCountryFlag(popularCode),
-            lowestPrice: applyMarkup(lowestBasePrice, markupPercent),
-          }
-        } catch {
-          notice = notice || 'We’re having trouble loading plans right now. Please try again in a moment.'
-          return null
-        }
-      })
-    )
-
-    for (const item of popularResults) {
-      if (!item) continue
-      otherDestinations.push(item)
-      if (otherDestinations.length >= 6) break
-    }
+    const otherDestinations = POPULAR_DESTINATIONS
+      .filter((d) => d.code !== countryCode)
+      .slice(0, 6)
+      .map((d) => ({
+        code: d.code,
+        name: d.name,
+        flag: getCountryFlag(d.code),
+        lowestPrice: d.from,
+      }))
 
     return (
       <CountryClient

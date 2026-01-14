@@ -21,16 +21,7 @@ import {
   CellSignalFull,
   BatteryFull,
 } from '@phosphor-icons/react'
-
-// Popular destinations data
-const popularDestinations = [
-  { code: 'JP', name: 'Japan', from: 1.80 },
-  { code: 'US', name: 'USA', from: 2.50 },
-  { code: 'TH', name: 'Thailand', from: 1.20 },
-  { code: 'GB', name: 'UK', from: 2.10 },
-  { code: 'FR', name: 'France', from: 1.90 },
-  { code: 'DE', name: 'Germany', from: 1.80 },
-]
+import { POPULAR_DESTINATIONS } from '@/lib/constants'
 
 // Animation variants for staggered word reveal
 const containerVariants = {
@@ -438,7 +429,7 @@ export default function HomePage() {
             </motion.div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {popularDestinations.map((dest, i) => (
+              {POPULAR_DESTINATIONS.slice(0, 6).map((dest, i) => (
                 <motion.div
                   key={dest.code}
                   initial={{ opacity: 0, y: 20 }}
