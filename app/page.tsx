@@ -92,7 +92,7 @@ export default function HomePage() {
 
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative overflow-hidden min-h-[90vh] flex items-center">
+        <section className="relative overflow-hidden min-h-[80vh] flex items-center">
           {/* Background */}
           <div className="absolute inset-0 mesh-gradient" />
           <div className="absolute inset-0 grid-pattern opacity-40" />
@@ -102,7 +102,7 @@ export default function HomePage() {
           <div className="absolute bottom-0 right-0 w-[600px] h-[600px] blob blob-2" />
           <div className="absolute top-1/2 left-1/3 w-[400px] h-[400px] blob blob-3" />
 
-          <div className="container mx-auto px-6 py-20 relative z-10">
+          <div className="container mx-auto px-6 py-12 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Left content */}
               <div>
