@@ -84,14 +84,19 @@ export default async function CountryDetailPage({ params }: Props) {
       }
     })
 
-    // Deduplicate plans (remove identical offers)
-    const seenPlanKeys = new Set<string>()
-    const plans = rawPlans.filter(plan => {
-      const key = `${plan.data}-${plan.days}-${plan.price}-${plan.speed}-${plan.dataType}`
-      if (seenPlanKeys.has(key)) return false
-      seenPlanKeys.add(key)
-      return true
-    }).sort((a, b) => {
+    // Deduplicate plans (keep lowest price for identical specs)
+    const bestPlansMap = new Map<string, typeof rawPlans[0]>()
+
+    for (const plan of rawPlans) {
+      const key = `${plan.data}-${plan.days}-${plan.speed}-${plan.dataType}`
+      const existing = bestPlansMap.get(key)
+
+      if (!existing || plan.price < existing.price) {
+        bestPlansMap.set(key, plan)
+      }
+    }
+
+    const plans = Array.from(bestPlansMap.values()).sort((a, b) => {
       // Sort by data amount (normalize to MB), then by price
       const getMB = (s: string) => {
         const val = parseFloat(s)
