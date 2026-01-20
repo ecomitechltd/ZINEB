@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     const totalPriceCents = Math.round(totalPrice * 100)
 
     // Generate unique transaction ID
-    const transactionId = `Zineb eSim-${session.user.id}-${Date.now()}`
+    const transactionId = `VIP eSim-${session.user.id}-${Date.now()}`
 
     // Get country info from location
     const locationCode = pkg.location.split(',')[0].trim()

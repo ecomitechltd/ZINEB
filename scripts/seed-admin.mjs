@@ -20,7 +20,7 @@ const adapter = new PrismaNeon({ connectionString })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL || 'admin@zineb.store'
+  const email = process.env.ADMIN_EMAIL || 'admin@e-sim.vip'
   const password = process.env.ADMIN_PASSWORD || 'Admin123!'
   const name = process.env.ADMIN_NAME || 'Admin'
 

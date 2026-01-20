@@ -10,8 +10,8 @@ function getResend() {
   return resend
 }
 
-const FROM_EMAIL = 'Zineb eSim <noreply@zineb.store>'
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://zineb.store'
+const FROM_EMAIL = 'VIP eSim <noreply@e-sim.vip>'
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://e-sim.vip'
 
 interface WelcomeEmailProps {
   email: string
@@ -50,7 +50,7 @@ export async function sendWelcomeEmail({ email, name }: WelcomeEmailProps) {
     const { data, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Welcome to Zineb eSim - Your Travel Companion',
+      subject: 'Welcome to VIP eSim - Your Travel Companion',
       html: `
 <!DOCTYPE html>
 <html>
@@ -62,7 +62,7 @@ export async function sendWelcomeEmail({ email, name }: WelcomeEmailProps) {
   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
     <!-- Header -->
     <div style="background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); padding: 40px 30px; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Zineb eSIM</h1>
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">VIP eSIM</h1>
       <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0; font-size: 14px;">Stay Connected Everywhere</p>
     </div>
 
@@ -71,7 +71,7 @@ export async function sendWelcomeEmail({ email, name }: WelcomeEmailProps) {
       <h2 style="color: #1a1a1a; margin: 0 0 20px; font-size: 24px;">Welcome, ${name}!</h2>
 
       <p style="color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
-        Thank you for joining Zineb eSIM! You're now part of a community of smart travelers who stay connected without the hassle of physical SIM cards.
+        Thank you for joining VIP eSIM! You're now part of a community of smart travelers who stay connected without the hassle of physical SIM cards.
       </p>
 
       <div style="background-color: #f8f9ff; border-radius: 12px; padding: 24px; margin: 30px 0;">
@@ -98,10 +98,10 @@ export async function sendWelcomeEmail({ email, name }: WelcomeEmailProps) {
     <!-- Footer -->
     <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #eee;">
       <p style="color: #999999; font-size: 12px; margin: 0 0 10px;">
-        Zineb eSim - Your Global eSIM Provider
+        VIP eSim - Your Global eSIM Provider
       </p>
       <p style="color: #cccccc; font-size: 11px; margin: 0;">
-        You received this email because you signed up for Zineb eSim.
+        You received this email because you signed up for VIP eSim.
       </p>
     </div>
   </div>
@@ -151,7 +151,7 @@ export async function sendPurchaseEmail({
   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
     <!-- Header -->
     <div style="background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); padding: 40px 30px; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Zineb eSim</h1>
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">VIP eSim</h1>
       <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0; font-size: 14px;">Your eSIM is Ready!</p>
     </div>
 
@@ -229,7 +229,7 @@ export async function sendPurchaseEmail({
         Need help? Visit our <a href="${BASE_URL}/help/install-esim" style="color: #4F46E5;">installation guide</a>
       </p>
       <p style="color: #cccccc; font-size: 11px; margin: 0;">
-        Zineb eSim - Your Global eSIM Provider
+        VIP eSim - Your Global eSIM Provider
       </p>
     </div>
   </div>
@@ -353,7 +353,7 @@ export async function sendGiftEsimEmail({
         Questions? Visit <a href="${BASE_URL}/help" style="color: #4F46E5;">our help center</a>
       </p>
       <p style="color: #cccccc; font-size: 11px; margin: 0;">
-        Zineb eSim - Your Global eSIM Provider
+        VIP eSim - Your Global eSIM Provider
       </p>
     </div>
   </div>

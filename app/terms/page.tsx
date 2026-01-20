@@ -4,8 +4,8 @@ import { FileText } from 'lucide-react'
 import { getBusinessInfo } from '@/lib/settings'
 
 export const metadata = {
-  title: 'Terms of Service - Zineb eSim',
-  description: 'Terms of Service for Zineb eSim eSIM services',
+  title: 'Terms of Service - VIP eSim',
+  description: 'Terms of Service for VIP eSim eSIM services',
 }
 
 export default async function TermsPage() {
@@ -36,7 +36,7 @@ export default async function TermsPage() {
               <div className="prose prose-gray max-w-none">
                 <h2>1. Agreement to Terms</h2>
                 <p>
-                  By accessing or using the Zineb eSim website and services (the &quot;Service&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you disagree with any part of these terms, you may not access the Service.
+                  By accessing or using the VIP eSim website and services (the &quot;Service&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you disagree with any part of these terms, you may not access the Service.
                 </p>
                 <p>
                   These Terms apply to all visitors, users, and others who access or use the Service. The Service is operated by {businessInfo.businessName}, located at {businessInfo.businessAddress} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
@@ -44,7 +44,7 @@ export default async function TermsPage() {
 
                 <h2>2. Description of Service</h2>
                 <p>
-                  Zineb eSim provides digital eSIM products that enable mobile data connectivity for travelers. Our services include:
+                  VIP eSim provides digital eSIM products that enable mobile data connectivity for travelers. Our services include:
                 </p>
                 <ul>
                   <li>Sale and delivery of eSIM data plans for various destinations</li>

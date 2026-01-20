@@ -38,7 +38,7 @@ export function Navbar() {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse" />
             </div>
             <span className="text-xl font-extrabold tracking-tight">
-              ZiNEB <span className="text-gradient">eSIM</span>
+              VIP <span className="text-gradient">eSIM</span>
             </span>
           </Link>
 

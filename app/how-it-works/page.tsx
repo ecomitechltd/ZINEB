@@ -17,7 +17,7 @@ export default function HowItWorksPage() {
                 <span className="text-sm font-medium">How It Works</span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-md mb-6">
-                Get connected in minutes with ZiNEB eSIM
+                Get connected in minutes with VIP eSIM
               </h1>
               <p className="text-xl text-indigo-100 max-w-2xl">
                 Pick a destination, buy a plan, scan the QR code, and you’re online. No physical SIM, no store visit.

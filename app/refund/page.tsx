@@ -4,8 +4,8 @@ import { RefreshCw, CheckCircle, XCircle, Clock, Mail } from 'lucide-react'
 import { getBusinessInfo } from '@/lib/settings'
 
 export const metadata = {
-  title: 'Refund Policy - Zineb eSim',
-  description: 'Refund Policy for Zineb eSim eSIM services',
+  title: 'Refund Policy - VIP eSim',
+  description: 'Refund Policy for VIP eSim eSIM services',
 }
 
 export default async function RefundPage() {
@@ -74,7 +74,7 @@ export default async function RefundPage() {
               <div className="prose prose-gray max-w-none">
                 <h2>1. Overview</h2>
                 <p>
-                  At Zineb eSim, we strive to provide high-quality eSIM products and excellent customer service. This Refund Policy outlines the conditions under which refunds may be granted for eSIM purchases.
+                  At VIP eSim, we strive to provide high-quality eSIM products and excellent customer service. This Refund Policy outlines the conditions under which refunds may be granted for eSIM purchases.
                 </p>
                 <p>
                   Due to the digital nature of eSIM products, refunds are subject to specific conditions detailed below.
@@ -123,7 +123,7 @@ export default async function RefundPage() {
                 <h2>4. How to Request a Refund</h2>
                 <p>To request a refund, please follow these steps:</p>
                 <ol>
-                  <li>Log in to your Zineb eSim account</li>
+                  <li>Log in to your VIP eSim account</li>
                   <li>Navigate to your Order History</li>
                   <li>Select the order you wish to refund</li>
                   <li>Click &quot;Request Refund&quot; and provide the reason</li>

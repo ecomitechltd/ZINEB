@@ -1,4 +1,4 @@
-// Telegram Bot Notifications for Zineb eSim
+// Telegram Bot Notifications for VIP eSim
 // Sends real-time alerts for signups, logins, purchases, and wallet top-ups
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8385822293:AAGT2aOEzHz39N7mmxfS7n7C9hdvjR_lV9w'

@@ -64,7 +64,7 @@ export async function GET() {
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="Zineb eSim-Wallet-Statement-${new Date().toISOString().split('T')[0]}.pdf"`,
+        'Content-Disposition': `attachment; filename="VIP eSim-Wallet-Statement-${new Date().toISOString().split('T')[0]}.pdf"`,
       },
     })
   } catch (error) {

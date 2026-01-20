@@ -6,7 +6,7 @@ import { sendPurchaseEmail } from '@/lib/email'
 import { notifyPurchase } from '@/lib/telegram'
 import { getSettings } from '@/lib/admin'
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://zineb.store'
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://e-sim.vip'
 
 // Apply markup to price
 function applyMarkup(price: number, markupPercent: number): number {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     const dataGB = bytesToGB(pkg.volume)
 
     // Generate unique reference ID
-    const referenceId = `Zineb eSim-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+    const referenceId = `VIP eSim-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
 
     // Deduct from wallet and create order in a transaction
     const newBalance = user.credits - totalPriceCents
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 
     // Now provision the eSIM
     try {
-      const transactionId = `Zineb eSim-${order.userId}-${Date.now()}`
+      const transactionId = `VIP eSim-${order.userId}-${Date.now()}`
 
       // Order from eSIM Access API
       const orderResult = await orderProfiles({

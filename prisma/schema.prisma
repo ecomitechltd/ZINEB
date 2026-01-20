@@ -169,9 +169,9 @@ model Settings {
   refereeBonus      Int   @default(200)  // $2.00 credit for referee
 
   // Business info for invoices/PDFs
-  businessName    String?   @default("Zineb eSim")
+  businessName    String?   @default("VIP eSim")
   businessAddress String?   @default("20-22 WenlockRoad , London . N1 7GU , UK")
-  businessEmail   String?   @default("support@zineb.store")
+  businessEmail   String?   @default("support@e-sim.vip")
   businessPhone   String?   @default("+1 (555) 123-4567")
   businessVAT     String?   // VAT/Tax ID number
 

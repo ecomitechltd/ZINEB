@@ -55,7 +55,7 @@ export default function LoginPage() {
               <Plane className="w-5 h-5 text-white" />
             </div>
             <span className="text-2xl font-bold">
-              ZiNEB <span className="text-indigo-600">eSIM</span>
+              VIP <span className="text-indigo-600">eSIM</span>
             </span>
           </Link>
 

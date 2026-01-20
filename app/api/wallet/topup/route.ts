@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { stripe } from '@/lib/stripe'
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://zineb.store'
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://e-sim.vip'
 const IS_DEV = process.env.NODE_ENV === 'development'
 
 // Check if we should use dummy payment mode

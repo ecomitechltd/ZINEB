@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
   const countryName = getCountryName(countryCode)
 
   return {
-    title: `${countryName} eSIM Plans | Zineb eSim`,
+    title: `${countryName} eSIM Plans | VIP eSim`,
     description: `Get instant mobile data in ${countryName}. Choose from multiple data plans with 4G/LTE speeds. Activate instantly.`,
   }
 }

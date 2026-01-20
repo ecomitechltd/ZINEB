@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { orderProfiles, queryProfiles, getPackages, bytesToGB, getCountryName } from '@/lib/esim-api'
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://zineb.store'
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://e-sim.vip'
 const IS_DEV = process.env.NODE_ENV === 'development'
 const G2PAY_API_KEY = process.env.G2PAY_API_KEY || ''
 
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Generate transaction ID for eSIM Access
-      const transactionId = `Zineb eSim-${order.userId}-${Date.now()}`
+      const transactionId = `VIP eSim-${order.userId}-${Date.now()}`
 
       // Order from eSIM Access API
       const orderResult = await orderProfiles({

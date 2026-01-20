@@ -13,8 +13,8 @@ import {
 } from 'lucide-react'
 
 export const metadata = {
-  title: 'eSIM Installation Guide - Zineb eSim',
-  description: 'Step-by-step guide to install your Zineb eSim eSIM',
+  title: 'eSIM Installation Guide - VIP eSim',
+  description: 'Step-by-step guide to install your VIP eSim eSIM',
 }
 
 export default function InstallEsimPage() {
@@ -251,7 +251,7 @@ export default function InstallEsimPage() {
                   Browse Help Center
                 </Link>
                 <a
-                  href="mailto:support@zineb.store"
+                  href="mailto:support@e-sim.vip"
                   className="btn btn-primary"
                 >
                   Contact Support

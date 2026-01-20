@@ -161,9 +161,9 @@ export function AdminDashboard({ adminUser }: AdminDashboardProps) {
             const data = await settingsRes.json()
             setSettings({
               markupPercent: data.settings.markupPercent || 0,
-              businessName: data.settings.businessName || 'Zineb eSim',
+              businessName: data.settings.businessName || 'VIP eSim',
               businessAddress: data.settings.businessAddress || '',
-              businessEmail: data.settings.businessEmail || '',
+              businessEmail: data.settings.businessEmail || 'support@e-sim.vip',
               businessPhone: data.settings.businessPhone || '',
               businessVAT: data.settings.businessVAT || '',
             })
@@ -910,7 +910,7 @@ function SettingsTab({
               value={settings.businessName}
               onChange={(e) => setSettings({ ...settings, businessName: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Zineb eSim"
+              placeholder="VIP eSim"
             />
           </div>
 
@@ -937,7 +937,7 @@ function SettingsTab({
                 value={settings.businessEmail}
                 onChange={(e) => setSettings({ ...settings, businessEmail: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="support@zineb.store"
+                placeholder="support@e-sim.vip"
               />
             </div>
 

@@ -146,7 +146,7 @@ export default function HomePage() {
                   </motion.span>
                   <br />
                   <AnimatedText
-                    text="With ZiNEB eSIM"
+                    text="With VIP eSIM"
                     className="block text-2xl lg:text-3xl font-bold text-gray-900"
                   />
                 </h1>

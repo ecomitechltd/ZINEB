@@ -70,7 +70,7 @@ export async function GET(
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="Zineb eSim-Invoice-${order.id.slice(-8).toUpperCase()}.pdf"`,
+        'Content-Disposition': `attachment; filename="VIP eSim-Invoice-${order.id.slice(-8).toUpperCase()}.pdf"`,
       },
     })
   } catch (error) {

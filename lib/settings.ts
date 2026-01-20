@@ -17,9 +17,9 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
 
   if (!process.env.DATABASE_URL) {
     return {
-      businessName: 'Zineb eSim',
+      businessName: 'VIP eSim',
       businessAddress: defaultAddress,
-      businessEmail: 'support@zineb.store',
+      businessEmail: 'support@e-sim.vip',
       businessPhone: '+1 307 223 7974',
       businessVAT: null,
     }
@@ -54,9 +54,9 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
     settings?.businessAddress === legacyAddress ? defaultAddress : (settings?.businessAddress || defaultAddress)
 
   return {
-    businessName: settings?.businessName || 'Zineb eSim',
+    businessName: settings?.businessName || 'VIP eSim',
     businessAddress: resolvedAddress,
-    businessEmail: settings?.businessEmail || 'support@zineb.store',
+    businessEmail: settings?.businessEmail || 'support@e-sim.vip',
     businessPhone: settings?.businessPhone || '+1 307 223 7974',
     businessVAT: settings?.businessVAT || null,
   }

@@ -154,7 +154,7 @@ export function DashboardClient({ user, esims, orders, stats, paymentError, paym
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `Zineb eSim-Invoice-${orderId.slice(-8).toUpperCase()}.pdf`
+      a.download = `VIP eSim-Invoice-${orderId.slice(-8).toUpperCase()}.pdf`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
@@ -176,7 +176,7 @@ export function DashboardClient({ user, esims, orders, stats, paymentError, paym
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `Zineb eSim-Wallet-Statement-${new Date().toISOString().split('T')[0]}.pdf`
+      a.download = `VIP eSim-Wallet-Statement-${new Date().toISOString().split('T')[0]}.pdf`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)

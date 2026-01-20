@@ -28,9 +28,9 @@ export function generateInvoicePDF(data: InvoiceData, business?: BusinessSetting
   const doc = new jsPDF()
 
   // Business info with defaults
-  const businessName = business?.businessName || 'Zineb eSim'
+  const businessName = business?.businessName || 'VIP eSim'
   const businessAddress = business?.businessAddress || '123 Digital Street\nLondon, UK EC1A 1BB'
-  const businessEmail = business?.businessEmail || 'support@zineb.store'
+  const businessEmail = business?.businessEmail || 'support@e-sim.vip'
   const businessPhone = business?.businessPhone || ''
   const businessVAT = business?.businessVAT || ''
 
@@ -213,9 +213,9 @@ export function generateWalletStatementPDF(data: WalletStatementData, business?:
   const doc = new jsPDF()
 
   // Business info with defaults
-  const businessName = business?.businessName || 'Zineb eSim'
+  const businessName = business?.businessName || 'VIP eSim'
   const businessAddress = business?.businessAddress || '123 Digital Street\nLondon, UK EC1A 1BB'
-  const businessEmail = business?.businessEmail || 'support@zineb.store'
+  const businessEmail = business?.businessEmail || 'support@e-sim.vip'
 
   const primaryColor = [79, 70, 229] as [number, number, number] // Indigo
   const textColor = [26, 26, 26] as [number, number, number]

@@ -407,7 +407,7 @@ export function CoverageClient({ countries }: Props) {
           <div className="container mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Why Choose Zineb eSim Coverage?
+                Why Choose VIP eSim Coverage?
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 We partner with the best carriers worldwide to ensure you get reliable, fast connectivity wherever you travel.

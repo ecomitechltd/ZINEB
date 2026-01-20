@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { notifyWalletTopup } from '@/lib/telegram'
 import { stripe } from '@/lib/stripe'
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://zineb.store'
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://e-sim.vip'
 
 export async function GET(request: NextRequest) {
   try {

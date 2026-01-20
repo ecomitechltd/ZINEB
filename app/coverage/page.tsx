@@ -5,7 +5,7 @@ import { CoverageClient } from './CoverageClient'
 export const revalidate = 300 // Cache for 5 minutes
 
 export const metadata = {
-  title: 'Global Coverage - Zineb eSim',
+  title: 'Global Coverage - VIP eSim',
   description: 'Check our global eSIM coverage. Stay connected in 190+ countries with 4G/5G networks from premium carriers.',
 }
 

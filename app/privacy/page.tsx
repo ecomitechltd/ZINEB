@@ -4,8 +4,8 @@ import { Shield } from 'lucide-react'
 import { getBusinessInfo } from '@/lib/settings'
 
 export const metadata = {
-  title: 'Privacy Policy - Zineb eSim',
-  description: 'Privacy Policy for Zineb eSim eSIM services',
+  title: 'Privacy Policy - VIP eSim',
+  description: 'Privacy Policy for VIP eSim eSIM services',
 }
 
 export default async function PrivacyPage() {
@@ -36,7 +36,7 @@ export default async function PrivacyPage() {
               <div className="prose prose-gray max-w-none">
                 <h2>1. Introduction</h2>
                 <p>
-                  {businessInfo.businessName} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the Zineb eSim website and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.
+                  {businessInfo.businessName} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the VIP eSim website and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.
                 </p>
                 <p>
                   We are committed to protecting your privacy and ensuring that your personal information is handled responsibly and in compliance with applicable data protection laws.

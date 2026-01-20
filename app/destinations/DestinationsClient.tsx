@@ -91,7 +91,7 @@ export function DestinationsClient({ destinations, popularCountries }: Destinati
                 Find Your Destination
               </h1>
               <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                Browse Zineb eSIM plans for 177+ countries. Instant activation, great rates.
+                Browse VIP eSIM plans for 177+ countries. Instant activation, great rates.
               </p>
 
               {/* Search Bar */}

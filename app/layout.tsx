@@ -10,7 +10,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Zineb eSim - Instant eSIM for Global Travelers",
+  title: "VIP eSim - Instant eSIM for Global Travelers",
   description: "Get connected anywhere in the world with instant eSIM data plans. No physical SIM needed. Works in 190+ countries.",
   icons: {
     icon: [
