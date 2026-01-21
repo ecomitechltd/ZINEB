@@ -19,8 +19,15 @@ const nextConfig: NextConfig = {
         hostname: 'flagcdn.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.e-sim.vip',
+        pathname: '/**',
+      },
     ],
   },
+  // Ensure trailing slashes are handled consistently (optional, but good for SEO/consistency)
+  trailingSlash: false,
 };
 
 export default nextConfig;

@@ -6,6 +6,7 @@ import { notifySignin } from './telegram'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
+  basePath: '/api/auth',
   secret:
     process.env.AUTH_SECRET ??
     process.env.NEXTAUTH_SECRET ??
